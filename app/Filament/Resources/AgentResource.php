@@ -29,7 +29,7 @@ class AgentResource extends Resource
                 Forms\Components\TextInput::make('username')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\FileUpload::make('profile_pricture')
+                Forms\Components\FileUpload::make('profile_picture')
                     ->image()
                     ->imageEditor(),
                 Forms\Components\TextInput::make('email')
@@ -51,7 +51,7 @@ class AgentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('profile_pricture')
+                Tables\Columns\ImageColumn::make('profile_picture')
                     ->defaultImageUrl(url('https://placehold.co/600x400'))
                     ->circular(),
                 Tables\Columns\TextColumn::make('name')
