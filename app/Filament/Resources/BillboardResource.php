@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\BillboardImageResource\RelationManagers\ImagesRelationManager;
 use App\Filament\Resources\BillboardResource\Pages;
 use App\Filament\Resources\BillboardResource\RelationManagers;
 use App\Models\Billboard;
@@ -81,6 +82,7 @@ class BillboardResource extends Resource
     {
         return [
             //
+            ImagesRelationManager::class,
         ];
     }
 

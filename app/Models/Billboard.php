@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\District;
 use App\Models\User;
+use App\Models\BillboardImage;
 
 class Billboard extends Model
 {
@@ -36,6 +37,11 @@ class Billboard extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(BillboardImage::class);
     }
     
 }
