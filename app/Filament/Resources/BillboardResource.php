@@ -35,15 +35,15 @@ class BillboardResource extends Resource
                         'updated' => 'Updated',
                         'notupdated' => 'Not Updated',
                         'rejected' => 'rejected'
-                    ]),
+                    ])
+                    ->required(),
                 Forms\Components\Select::make('district_id')
                     ->relationship('district', 'name')
                     ->searchable()
                     ->required(),
                 Forms\Components\Select::make('agent_id')
                     ->relationship('agent', 'name')
-                    ->searchable()
-                    ->required(),
+                    ->searchable(),
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
                     ->required(),
