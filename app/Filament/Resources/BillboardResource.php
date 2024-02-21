@@ -29,11 +29,23 @@ class BillboardResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'updated' => 'Updated',
+                        'notupdated' => 'Not Updated',
+                        'rejected' => 'rejected'
+                    ])
+                    ->required(),
                 Forms\Components\Select::make('district_id')
                     ->relationship('district', 'name')
                     ->searchable()
                     ->required(),
-                Forms\Components\Toggle::make('status')
+                Forms\Components\Select::make('agent_id')
+                    ->relationship('agent', 'name')
+                    ->searchable(),
+                Forms\Components\Toggle::make('is_active')
+                    ->default(true)
                     ->required(),
             ]);
     }
@@ -44,14 +56,19 @@ class BillboardResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'gray',
+                        'updated' => 'success',
+                        'notupdated' => 'warning',
+                        'rejected' => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('district.name')
-                    ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('agent.name'),
                 Tables\Columns\TextColumn::make('createdBy.name')
-                    ->numeric()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('status')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -61,7 +78,8 @@ class BillboardResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Date Updated')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
             ])

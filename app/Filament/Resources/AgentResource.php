@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgentResource\Pages;
 use App\Filament\Resources\AgentResource\RelationManagers;
+use App\Filament\Resources\AgentResource\RelationManagers\BillboardsRelationManager;
 use App\Models\Agent;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -84,6 +85,7 @@ class AgentResource extends Resource
     {
         return [
             //
+            BillboardsRelationManager::class,
         ];
     }
 
