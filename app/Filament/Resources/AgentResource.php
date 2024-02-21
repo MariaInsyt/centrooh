@@ -19,6 +19,8 @@ class AgentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
 
+    protected static ?string $navigationGroup = 'Operations';
+
     public static function form(Form $form): Form
     {
         return $form
