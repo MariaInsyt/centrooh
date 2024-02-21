@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\BillboardAgent;
 
 class Agent extends Model
 {
@@ -29,4 +30,9 @@ class Agent extends Model
         'status' => 'boolean',
         'password' => 'hashed',
     ];
+
+    public function billboards()
+    {
+        return $this->hasMany(BillboardAgent::class);
+    }
 }

@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\District;
 use App\Models\User;
 use App\Models\BillboardImage;
+use App\Models\BillboardAgent;
 
 class Billboard extends Model
 {
     use HasFactory, SoftDeletes;
 
-    //Automatically add user_id to created_by on save
     public static function boot()
     {
         parent::boot();
@@ -44,4 +44,8 @@ class Billboard extends Model
         return $this->hasMany(BillboardImage::class);
     }
     
+    public function agent()
+    {
+        return $this->hasOne(BillboardAgent::class);
+    }
 }
