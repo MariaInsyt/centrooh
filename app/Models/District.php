@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Region;
+use App\Models\Billboard;
 
 class District extends Model
 {
@@ -27,4 +28,8 @@ class District extends Model
         return $query->where('status', 1);
     }
 
+    public function billboards()
+    {
+        return $this->hasMany(Billboard::class);
+    }
 }

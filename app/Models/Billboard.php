@@ -27,6 +27,11 @@ class Billboard extends Model
         'name',
         'status',
         'agent_id',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function district()
@@ -46,6 +51,6 @@ class Billboard extends Model
 
     public function agent()
     {
-        return $this->hasOne(Agent::class);
+        return $this->belongsTo(Agent::class);
     }
 }
