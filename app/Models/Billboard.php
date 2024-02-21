@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\District;
 use App\Models\User;
 use App\Models\BillboardImage;
-use App\Models\BillboardAgent;
-
+use App\Models\Agent;
 class Billboard extends Model
 {
     use HasFactory, SoftDeletes;
@@ -27,6 +26,7 @@ class Billboard extends Model
         'created_by',
         'name',
         'status',
+        'agent_id',
     ];
 
     public function district()
@@ -43,9 +43,9 @@ class Billboard extends Model
     {
         return $this->hasMany(BillboardImage::class);
     }
-    
+
     public function agent()
     {
-        return $this->hasOne(BillboardAgent::class);
+        return $this->hasOne(Agent::class);
     }
 }
