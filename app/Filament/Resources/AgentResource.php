@@ -86,8 +86,8 @@ class AgentResource extends Resource
     {
         return [
             //
-            BillboardsRelationManager::class,
             AgentDistrictsRelationManager::class,
+            BillboardsRelationManager::class,
         ];
     }
 
