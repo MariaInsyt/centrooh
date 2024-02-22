@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 
 class BillboardResource extends Resource
 {
@@ -47,6 +48,7 @@ class BillboardResource extends Resource
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
                     ->required(),
+                Map::make('location'),
             ]);
     }
 
