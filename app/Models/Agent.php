@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Billboard;
+use App\Models\AgentDistrict;
 
 class Agent extends Model
 {
@@ -34,5 +35,10 @@ class Agent extends Model
     public function billboards()
     {
         return $this->hasMany(Billboard::class);
+    }
+
+    public function agentDistricts()
+    {
+        return $this->hasMany(AgentDistrict::class);
     }
 }
