@@ -17,19 +17,19 @@ class Agent extends Model
         'username',
         'profile_picture',
         'email',
-        'password',
         'phone_number',
         'status',
         'email_verified_at'
     ];
 
     protected $hidden = [
-        'password'
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     protected $casts = [
         'status' => 'boolean',
-        'password' => 'hashed',
     ];
 
     public function billboards()

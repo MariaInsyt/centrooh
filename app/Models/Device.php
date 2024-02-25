@@ -15,12 +15,20 @@ class Device extends SanctumPersonalAccessToken
     use HasApiTokens, HasFactory, SoftDeletes, Notifiable;
 
     protected $fillable = [
+        'device_id',
         'device_name',
         'device_type',
         'token',
         'notification_token',
         'ip_address',
         'is_active',
+    ];
+
+    //Hidden
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [

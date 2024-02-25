@@ -68,6 +68,7 @@ class OneTimePasswordController extends Controller
                 'ip_address' => $request->ip(),
             ]
         );
+
         $device->token = $device->createToken($device->device_id)->plainTextToken;
         $device->save();
 
