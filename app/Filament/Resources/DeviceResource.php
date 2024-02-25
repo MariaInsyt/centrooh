@@ -25,16 +25,6 @@ class DeviceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('device_name')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('device_type')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('token')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('ip_address')
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
             ]);
     }
 
@@ -42,14 +32,9 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('agent_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('device_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('device_type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('token')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ip_address')
                     ->searchable(),

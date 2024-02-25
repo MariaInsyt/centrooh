@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OneTimePasswordController;
@@ -24,5 +25,8 @@ Route::controller(OneTimePasswordController::class)->group(
         Route::post('/otp/verify', 'verifyOtp');
     }
 );
+
+Route::post('/agent/register', [AgentController::class, 'create']);
+
 
 
