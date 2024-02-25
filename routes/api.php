@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BillboardImageController;
-
+use App\Http\Controllers\OneTimePasswordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,5 +17,12 @@ use App\Http\Controllers\BillboardImageController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::controller(OneTimePasswordController::class)->group(
+    function () {
+        Route::post('/otp', 'sendOtp');
+        Route::post('/otp/verify', 'verifyOtp');
+    }
+);
 
 
