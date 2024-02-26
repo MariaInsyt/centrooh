@@ -63,13 +63,13 @@ class AgentController extends Controller
                 DB::rollBack();
             }
             DB::commit();
-        });
 
-        return response()->json([
-            'message' => 'Agent created successfully',
-            'agent' => $agent,
-            'token' => $token
-        ], 201);
+            return response()->json([
+                'message' => 'Agent created successfully',
+                'agent' => $agent,
+                'token' => $token
+            ], 201);
+        });
     }
 
     public function agent(Request $request)
