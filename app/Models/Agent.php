@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Billboard;
 use App\Models\AgentDistrict;
+use App\Models\Device;
 
 class Agent extends Model
 {
@@ -40,5 +41,10 @@ class Agent extends Model
     public function agentDistricts()
     {
         return $this->hasMany(AgentDistrict::class);
+    }
+
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
     }
 }

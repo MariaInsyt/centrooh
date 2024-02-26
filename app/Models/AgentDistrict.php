@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Agent;
 use App\Models\District;
+use App\Models\Billboard;
 
 class AgentDistrict extends Model
 {

@@ -41,6 +41,7 @@ class AgentController extends Controller
                     'device_type' => $request->device_info['device_type'],
                     'ip_address' => $request->ip(),
                     'notification_token' => $request->notification_token,
+                    'agent_id' => $agent->id
                 ]);
                 $token = $device->createToken($device->device_id)->plainTextToken;
                 $device->token = $token;
@@ -61,5 +62,20 @@ class AgentController extends Controller
             'agent' => $agent,
             'token' => $token
         ], 201);
+    }
+
+    public function agent(Request $request)
+    {
+        $agent = Agent::find($request->user()->agent_id);
+
+        if (!$agent) {
+            return response()->json([
+                'message' => 'Agent not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'agent' => $agent
+        ], 200);
     }
 }

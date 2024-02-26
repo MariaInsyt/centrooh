@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\BillboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OneTimePasswordController;
@@ -28,5 +29,20 @@ Route::controller(OneTimePasswordController::class)->group(
 
 Route::post('/agent/register', [AgentController::class, 'create']);
 
+Route::controller(AgentController::class)
+    ->middleware('auth:sanctum')
+    ->group(
+    function () {
+        Route::get('/agent', 'agent');
+        //Agent's billboards
+        Route::get('/agent/districts', 'agentDistricts');
+    }
+);
 
-
+Route::controller(BillboardController::class)
+    ->middleware('auth:sanctum')
+    ->group(
+    function () {
+        Route::get('/billboard', 'billboard');
+    }
+);
