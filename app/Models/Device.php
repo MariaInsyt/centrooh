@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Agent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use Illuminate\Notifications\Notifiable;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Device;
+use App\Models\AgentDistrict;
+use App\Models\Billboard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +26,6 @@ class AgentController extends Controller
         ]);
 
         //Todo: Implement OTP verification
-
         DB::transaction(function () use ($request, &$agent, &$token) {
             try{
             $agent = Agent::create([
@@ -78,4 +79,33 @@ class AgentController extends Controller
             'agent' => $agent
         ], 200);
     }
+
+    public function agentDistricts(Request $request)
+    {
+        $districts = AgentDistrict::where('agent_id', $request->user()->agent_id)
+        ->with([
+            'district'
+        ])
+        ->get();
+
+        return response()->json([
+            'districts' => $districts
+        ]);
+    }
+
+    public function agentBillBoardsInDistrict(Request $request)
+    {
+        $district = $request->district_id;
+
+        $billboards = Billboard::whereHas('district', function ($query) use ($district) {
+            $query->where('district_id', $district);
+        })
+        ->where('agent_id', $request->user()->agent_id)
+        ->get();
+        
+        return response()->json([
+            'billboards' => $billboards
+        ]);
+    }
+
 }

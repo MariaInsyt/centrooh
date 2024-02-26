@@ -14,6 +14,8 @@ class District extends Model
 
     protected $fillable = ['name', 'status', 'region_id'];
 
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+
     protected $casts = [
         'status' => 'boolean'
     ];

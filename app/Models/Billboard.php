@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\District;
 use App\Models\User;
 use App\Models\BillboardImage;
 use App\Models\Agent;
-use App\Models\AgentDistrict;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Billboard extends Model
 {
     use HasFactory, SoftDeletes;
@@ -29,6 +29,11 @@ class Billboard extends Model
         'status',
         'agent_id',
         'is_active',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'deleted_at',
     ];
 
     protected $casts = [

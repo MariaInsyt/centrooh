@@ -34,8 +34,8 @@ Route::controller(AgentController::class)
     ->group(
     function () {
         Route::get('/agent', 'agent');
-        //Agent's billboards
         Route::get('/agent/districts', 'agentDistricts');
+        Route::get('/agent/billboards', 'agentBillBoardsInDistrict');
     }
 );
 
