@@ -31,17 +31,12 @@ class AgentResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('username')
-                    ->required()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('profile_picture')
                     ->image()
                     ->imageEditor(),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
