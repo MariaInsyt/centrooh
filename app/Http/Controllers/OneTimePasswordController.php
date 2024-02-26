@@ -66,6 +66,7 @@ class OneTimePasswordController extends Controller
                 'device_name' => $request->device_info['deviceName'],
                 'device_type' => $request->device_info['deviceType'],
                 'ip_address' => $request->ip(),
+                'agent_id' => $agent->id
             ]
         );
 
