@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Billboard;
+use App\Models\AgentDistrict;
+use App\Models\Device;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Billboard;
-use App\Models\AgentDistrict;
-
 class Agent extends Model
 {
     use HasFactory, SoftDeletes;
@@ -40,5 +40,10 @@ class Agent extends Model
     public function agentDistricts()
     {
         return $this->hasMany(AgentDistrict::class);
+    }
+
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
     }
 }

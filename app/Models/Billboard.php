@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\District;
 use App\Models\User;
 use App\Models\BillboardImage;
 use App\Models\Agent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Billboard extends Model
 {
     use HasFactory, SoftDeletes;
@@ -30,9 +31,20 @@ class Billboard extends Model
         'is_active',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'deleted_at',
+    ];
+
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    //Scope Active
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 
     public function district()
     {

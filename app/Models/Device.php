@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Agent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use Illuminate\Notifications\Notifiable;
@@ -22,11 +22,10 @@ class Device extends SanctumPersonalAccessToken
         'notification_token',
         'ip_address',
         'is_active',
+        'agent_id'
     ];
 
-    //Hidden
     protected $hidden = [
-        'id',
         'created_at',
         'updated_at',
     ];
@@ -35,4 +34,8 @@ class Device extends SanctumPersonalAccessToken
         'is_active' => 'boolean',
     ];
 
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class);
+    }
 }

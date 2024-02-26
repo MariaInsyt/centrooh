@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Device;
+use App\Models\AgentDistrict;
+use App\Models\Billboard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +26,6 @@ class AgentController extends Controller
         ]);
 
         //Todo: Implement OTP verification
-
         DB::transaction(function () use ($request, &$agent, &$token) {
             try{
             $agent = Agent::create([
@@ -41,6 +42,7 @@ class AgentController extends Controller
                     'device_type' => $request->device_info['device_type'],
                     'ip_address' => $request->ip(),
                     'notification_token' => $request->notification_token,
+                    'agent_id' => $agent->id
                 ]);
                 $token = $device->createToken($device->device_id)->plainTextToken;
                 $device->token = $token;
@@ -62,4 +64,48 @@ class AgentController extends Controller
             'token' => $token
         ], 201);
     }
+
+    public function agent(Request $request)
+    {
+        $agent = Agent::find($request->user()->agent_id);
+
+        if (!$agent) {
+            return response()->json([
+                'message' => 'Agent not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'agent' => $agent
+        ], 200);
+    }
+
+    public function agentDistricts(Request $request)
+    {
+        $districts = AgentDistrict::where('agent_id', $request->user()->agent_id)
+        ->with([
+            'district'
+        ])
+        ->get();
+
+        return response()->json([
+            'districts' => $districts
+        ]);
+    }
+
+    public function agentBillBoardsInDistrict(Request $request)
+    {
+        $district = $request->district_id;
+
+        $billboards = Billboard::whereHas('district', function ($query) use ($district) {
+            $query->where('district_id', $district);
+        })
+        ->where('agent_id', $request->user()->agent_id)
+        ->get();
+        
+        return response()->json([
+            'billboards' => $billboards
+        ]);
+    }
+
 }
