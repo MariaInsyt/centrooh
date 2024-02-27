@@ -47,7 +47,7 @@ class SendOneTimePassword implements ShouldQueue
 
         $result = $sms->send([
             'to' => $this->oneTimePassword->phone_number,
-            'message' => 'Your OTP is ' . $this->oneTimePassword->code
+            'message' => 'Your INSYTMEDIA otp is ' . $this->oneTimePassword->code
         ]);
 
         Log::info($result);
