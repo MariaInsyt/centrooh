@@ -11,6 +11,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Cheesegrits\FilamentGoogleMaps\Fields\Map;
+use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -47,6 +49,52 @@ class BillboardResource extends Resource
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
                     ->required(),
+                Map::make('map')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                        $set('lat', $state['lat']);
+                        $set('lng', $state['lng']);
+                    })
+                    ->mapControls([
+                        'mapTypeControl'    => false,
+                        'scaleControl'      => true,
+                        'streetViewControl' => false,
+                        'rotateControl'     => false,
+                        'fullscreenControl' => true,
+                        'searchBoxControl'  => false,
+                        'zoomControl'       => true,
+                    ])
+                    ->height(fn () => '400px')
+                    ->defaultZoom(15)
+                    ->defaultLocation(fn ($record) => [
+                        $record->lat ?? 0.3401327,
+                        $record->lng ?? 32.5864384,
+                    ])
+                    ->draggable()
+                    ->clickable(false)
+                    ->geolocate() // adds a button to request device location and set map marker accordingly
+                    ->geolocateOnLoad(true, false)
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('lat')
+                    ->label('Latitude')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                        $set('map', [
+                            'lat' => floatVal($state),
+                            'lng' => floatVal($get('longitude')),
+                        ]);
+                    })
+                    ->lazy(), // important to use lazy, to avoid updates as you type
+                Forms\Components\TextInput::make('lng')
+                    ->label('Longitude')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                        $set('map', [
+                            'lat' => floatval($get('latitude')),
+                            'lng' => floatVal($state),
+                        ]);
+                    })
+                    ->lazy(),
             ]);
     }
 
