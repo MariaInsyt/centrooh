@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\BillboardController;
+use App\Http\Controllers\OneTimePasswordController;
+use App\Http\Controllers\DeviceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OneTimePasswordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,5 +45,13 @@ Route::controller(BillboardController::class)
     ->group(
     function () {
         Route::get('/billboard', 'billboard');
+    }
+);
+
+Route::controller(DeviceController::class)
+    ->middleware('auth:sanctum')
+    ->group(
+    function () {
+        Route::post('/ping', 'ping');
     }
 );
