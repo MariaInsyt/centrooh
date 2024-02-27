@@ -72,7 +72,9 @@ class BillboardResource extends Resource
                     ])
                     ->draggable()
                     ->clickable(false)
-                    ->geolocate() // adds a button to request device location and set map marker accordingly
+                    ->autocomplete('location')
+                    ->autocompleteReverse()
+                    ->geolocate()
                     ->geolocateOnLoad(true, false)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('lat')
@@ -84,7 +86,7 @@ class BillboardResource extends Resource
                             'lng' => floatVal($get('longitude')),
                         ]);
                     })
-                    ->lazy(), // important to use lazy, to avoid updates as you type
+                    ->lazy(),
                 Forms\Components\TextInput::make('lng')
                     ->label('Longitude')
                     ->reactive()
@@ -95,6 +97,8 @@ class BillboardResource extends Resource
                         ]);
                     })
                     ->lazy(),
+                // Forms\Components\TextInput::make('location')
+                //     ->maxLength(1024),
             ]);
     }
 
