@@ -19,7 +19,10 @@ class OneTimePasswordController extends Controller
 
         $code = OneTimePassword::updateOrCreate(
             ['phone_number' => $request->phone_number],
-            ['code' => $this->generateRandomNumber()]
+            [
+                'code' => $this->generateRandomNumber(),
+                'status' => 'pending'
+            ]
         );
 
         SendOneTimePassword::dispatch($code);
@@ -33,7 +36,12 @@ class OneTimePasswordController extends Controller
     {
         $request->validate([
             'phone_number' => 'required|numeric',
-            'code' => 'required|numeric'
+            'code' => 'required|numeric',
+            'device_info' => 'required|array',
+            'device_info.device_name' => 'string|nullable',
+            'device_info.device_type' => 'string|nullable',
+            'device_info.device_brand' => 'string|nullable',
+            'notification_token' => 'string|nullable'
         ]);
 
         $otp = OneTimePassword::where('phone_number', $request->phone_number)
@@ -49,7 +57,6 @@ class OneTimePasswordController extends Controller
 
         $otp->status = 'used';
         $otp->save();
-        $otp->delete();
 
         $agent = Agent::where('phone_number', $request->phone_number)->first();
 
@@ -61,16 +68,17 @@ class OneTimePasswordController extends Controller
         }
 
         $device = Device::updateOrCreate(
-            ['device_id' => $request->device_info['uniqueId']],
+            ['agent_id' => $agent->id],
             [
-                'device_name' => $request->device_info['deviceName'],
-                'device_type' => $request->device_info['deviceType'],
+                'device_name' => $request->device_info['device_name'],
+                'device_type' => $request->device_info['device_type'],
+                'device_brand' => $request->device_info['device_brand'],
+                'notification_token' => $request->notification_token,
                 'ip_address' => $request->ip(),
-                'agent_id' => $agent->id
             ]
         );
 
-        $device->token = $device->createToken($device->device_id)->plainTextToken;
+        $device->token = $device->createToken($agent->uuid)->plainTextToken;
         $device->save();
 
         return response()->json([
