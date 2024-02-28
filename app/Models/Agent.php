@@ -14,12 +14,13 @@ class Agent extends Model
 
     protected $fillable = [
         'name',
+        'uuid',
         'username',
         'profile_picture',
         'email',
         'phone_number',
         'status',
-        'email_verified_at'
+        'email_verified_at',
     ];
 
     protected $hidden = [

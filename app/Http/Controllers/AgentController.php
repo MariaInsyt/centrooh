@@ -8,6 +8,7 @@ use App\Models\AgentDistrict;
 use App\Models\Billboard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class AgentController extends Controller
 {
@@ -19,9 +20,9 @@ class AgentController extends Controller
             'email' => 'required|email:rfc,dns|unique:agents',
             'phone_number' => 'required|numeric|unique:agents',
             'notification_token' => 'string|nullable',
-            'device_info.device_name' => 'string|required',
-            'device_info.device_type' => 'string|required',
-            'device_info.uniqueId' => 'string|required',
+            'device_info.device_name' => 'string|nullable',
+            'device_info.device_type' => 'string|nullable',
+            'device_info.device_brand' => 'string|nullable',
         ]);
 
         //Todo: Implement OTP verification
@@ -29,22 +30,23 @@ class AgentController extends Controller
             try {
                 $agent = Agent::create([
                     'name' => $request->name,
-                    'username' => $request->username,
                     'email' => $request->email,
                     'phone_number' => $request->phone_number,
+                    'uuid' => Uuid::uuid4(),
+                    'username' => $this->createUserName($request->name)
                 ]);
                 sleep(2);
                 if ($agent) {
                     try {
                         $device = Device::create([
                             'agent_id' => $agent->id,
-                            'device_id' => $request->device_info['uniqueId'],
                             'device_name' => $request->device_info['device_name'],
                             'device_type' => $request->device_info['device_type'],
+                            'device_brand' => $request->device_info['device_brand'],
                             'ip_address' => $request->ip(),
                             'notification_token' => $request->notification_token,
                         ]);
-                        $token = $device->createToken($device->device_id)->plainTextToken;
+                        $token = $device->createToken($agent->uuid)->plainTextToken;
                         $device->token = $token;
                         $device->save();
                     } catch (\Exception $e) {
@@ -114,5 +116,16 @@ class AgentController extends Controller
         return response()->json([
             'billboards' => $billboards
         ]);
+    }
+
+    protected function createUserName($name)
+    {
+        $username = str()->snake(strtolower($name));
+
+        $count = Agent::where('username', $username)->count();
+        if ($count > 0) {
+            $username = $username . $count;
+        }
+        return $username;
     }
 }
