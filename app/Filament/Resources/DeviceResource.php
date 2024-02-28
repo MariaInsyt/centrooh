@@ -32,6 +32,10 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('agent.name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('device_brand')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('device_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('device_type')
