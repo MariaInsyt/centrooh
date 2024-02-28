@@ -24,20 +24,23 @@ class OneTimePasswordResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('code')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('code'),
                 Tables\Columns\TextColumn::make('phone_number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'used' => 'success',
+                        'expired' => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -82,6 +85,6 @@ class OneTimePasswordResource extends Resource
 
     public static function canCreate(): bool
     {
-       return false;
+        return false;
     }
 }
