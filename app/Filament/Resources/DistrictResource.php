@@ -3,15 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DistrictResource\Pages;
-use App\Filament\Resources\DistrictResource\RelationManagers;
 use App\Models\District;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Region;
 
 class DistrictResource extends Resource
 {
@@ -28,7 +26,8 @@ class DistrictResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('region_id')
-                    ->relationship('region', 'name')
+                    ->label('Region')
+                    ->options(Region::active()->get()->pluck('name', 'id')->toArray())
                     ->searchable()
                     ->preload()
                     ->required(),
@@ -51,7 +50,7 @@ class DistrictResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
-            ])
+            ])->defaultSort('name', 'asc')
             ->filters([
                 //
             ])

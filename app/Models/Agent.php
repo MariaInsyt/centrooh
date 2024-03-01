@@ -33,6 +33,11 @@ class Agent extends Model
         'status' => 'boolean',
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', true);
+    }
+
     public function billboards()
     {
         return $this->hasMany(Billboard::class);

@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BillboardImageResource\RelationManagers\ImagesRelationManager;
 use App\Filament\Resources\BillboardResource\Pages;
-use App\Filament\Resources\BillboardResource\RelationManagers;
 use App\Models\Billboard;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,9 +11,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
-use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\District;
+use App\Models\Agent;
 
 class BillboardResource extends Resource
 {
@@ -38,13 +36,16 @@ class BillboardResource extends Resource
                         'notupdated' => 'Not Updated',
                         'rejected' => 'rejected'
                     ])
+                    ->default('pending')
                     ->required(),
                 Forms\Components\Select::make('district_id')
-                    ->relationship('district', 'name')
+                    ->label('District')
+                    ->options(District::active()->get()->pluck('name', 'id')->toArray())
                     ->searchable()
                     ->required(),
                 Forms\Components\Select::make('agent_id')
-                    ->relationship('agent', 'name')
+                    ->label('Agent')
+                    ->options(Agent::active()->get()->pluck('name', 'id')->toArray())
                     ->searchable(),
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
@@ -134,7 +135,7 @@ class BillboardResource extends Resource
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

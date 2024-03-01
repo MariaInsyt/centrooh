@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgentResource\Pages;
-use App\Filament\Resources\AgentResource\RelationManagers;
 use App\Filament\Resources\AgentResource\RelationManagers\AgentDistrictsRelationManager;
 use App\Filament\Resources\AgentResource\RelationManagers\BillboardsRelationManager;
 use App\Models\Agent;
@@ -12,8 +11,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
 
 class AgentResource extends Resource
 {
@@ -63,7 +62,10 @@ class AgentResource extends Resource
                     ->searchable(),
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
-            ])
+                Tables\Columns\TextColumn::make('created_at')
+                ->label('Created At')
+                ->since(),
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
@@ -74,7 +76,7 @@ class AgentResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->poll('10s');
     }
 
     public static function getRelations(): array

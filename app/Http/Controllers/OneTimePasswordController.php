@@ -7,6 +7,7 @@ use App\Models\OneTimePassword;
 use App\Jobs\SendOneTimePassword;
 use App\Models\Agent;
 use App\Models\Device;
+use Ramsey\Uuid\Uuid;
 
 class OneTimePasswordController extends Controller
 {
@@ -21,7 +22,8 @@ class OneTimePasswordController extends Controller
             ['phone_number' => $request->phone_number],
             [
                 'code' => $this->generateRandomNumber(),
-                'status' => 'pending'
+                'status' => 'pending',
+                'expires_at' => now()->addMinutes(5),
             ]
         );
 
@@ -44,10 +46,11 @@ class OneTimePasswordController extends Controller
             'notification_token' => 'string|nullable'
         ]);
 
-        $otp = OneTimePassword::where('phone_number', $request->phone_number)
-            ->where('code', $request->code)
-            ->where('status', 'pending')
-            ->first();
+        $otp = OneTimePassword::where([
+            'phone_number' => $request->phone_number,
+            'code' => $request->code,
+            'status' => 'pending'
+        ])->first();
 
         if (!$otp) {
             return response()->json([
@@ -55,8 +58,10 @@ class OneTimePasswordController extends Controller
             ], 404);
         }
 
-        $otp->status = 'used';
-        $otp->save();
+        $otp->update([
+            'phone_number_verified_at' => now(),
+            'status' => 'used'
+        ]);
 
         $agent = Agent::where('phone_number', $request->phone_number)->first();
 
@@ -70,6 +75,7 @@ class OneTimePasswordController extends Controller
         $device = Device::updateOrCreate(
             ['agent_id' => $agent->id],
             [
+                'uuid' =>   Uuid::uuid4(),
                 'device_name' => $request->device_info['device_name'],
                 'device_type' => $request->device_info['device_type'],
                 'device_brand' => $request->device_info['device_brand'],
@@ -78,8 +84,8 @@ class OneTimePasswordController extends Controller
             ]
         );
 
-        $device->token = $device->createToken($agent->uuid)->plainTextToken;
-        $device->save();
+        $device->tokens()->delete();
+        $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
 
         return response()->json([
             'message' => 'OTP validated successfully',
