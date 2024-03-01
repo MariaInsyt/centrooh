@@ -6,6 +6,7 @@ use App\Models\Agent;
 use App\Models\Device;
 use App\Models\AgentDistrict;
 use App\Models\Billboard;
+use App\Models\OneTimePassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -25,7 +26,16 @@ class AgentController extends Controller
             'device_info.device_brand' => 'string|nullable',
         ]);
 
-        //Todo: Implement OTP verification
+        $phone_verified = OneTimePassword::where('phone_number', $request->phone_number)
+            ->whereNotNull('phone_number_verified_at')
+            ->first();
+         
+        if (!$phone_verified) {
+            return response()->json([
+                'message' => 'Phone number not verified'
+            ], 400);
+        }
+            
         DB::transaction(function () use ($request, &$agent, &$token) {
             try {
                 $agent = Agent::create([
@@ -40,15 +50,15 @@ class AgentController extends Controller
                     try {
                         $device = Device::create([
                             'agent_id' => $agent->id,
+                            'uuid' =>   Uuid::uuid4(),
                             'device_name' => $request->device_info['device_name'],
                             'device_type' => $request->device_info['device_type'],
                             'device_brand' => $request->device_info['device_brand'],
                             'ip_address' => $request->ip(),
                             'notification_token' => $request->notification_token,
                         ]);
-                        $token = $device->createToken($agent->uuid)->plainTextToken;
-                        $device->token = $token;
-                        $device->save();
+                        $token = $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
+                        $device->update(['token' => $token]);
                     } catch (\Exception $e) {
                         return response()->json([
                             'message' => 'Device creation failed',
@@ -72,7 +82,6 @@ class AgentController extends Controller
             'agent' => $agent,
             'token' => $token
         ], 201);
-        
     }
 
     public function agent(Request $request)

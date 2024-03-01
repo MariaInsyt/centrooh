@@ -14,9 +14,16 @@ class OneTimePassword extends Model
         'code',
         'phone_number',
         'status',
+        'phone_number_verified_at',
+        'expires_at'
     ];
 
     protected $hidden = [
         'deleted_at',
+    ];
+
+    protected $casts = [
+        'phone_number_verified_at' => 'datetime',
+        'expires_at' => 'datetime'
     ];
 }

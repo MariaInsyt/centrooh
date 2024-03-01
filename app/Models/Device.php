@@ -15,6 +15,7 @@ class Device extends SanctumPersonalAccessToken
     use HasApiTokens, HasFactory, SoftDeletes, Notifiable;
 
     protected $fillable = [
+        'uuid',
         'device_name',
         'device_type',
         'device_brand',
@@ -33,6 +34,11 @@ class Device extends SanctumPersonalAccessToken
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 
     public function agent()
     {
