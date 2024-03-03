@@ -49,7 +49,7 @@ class OneTimePasswordResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])->defaultSort('created_at', 'desc')
+            ])->defaultSort('updated_at', 'desc')
             ->filters([
                 //
             ])
@@ -60,7 +60,7 @@ class OneTimePasswordResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->poll('10s');
     }
 
     public static function getRelations(): array
