@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Billboard;
+use App\Models\Agent;
 use Illuminate\Http\Request;
 
 class BillboardController extends Controller
@@ -19,6 +20,25 @@ class BillboardController extends Controller
         } else {
             return response()->json([
                 'message' => 'Billboard not found'
+            ], 404);
+        }
+    }
+
+    public function agentBillboards(Request $request)
+    {
+        $agent = Agent::find($request->user()->agent_id);
+
+        if ($agent) {
+            return response()->json([
+                'billboards' => $agent->billboards()
+                    ->active()
+                    ->with('district:id,name')
+                    ->get()
+
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Agent not found'
             ], 404);
         }
     }
