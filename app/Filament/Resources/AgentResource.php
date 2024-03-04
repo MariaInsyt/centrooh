@@ -12,7 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Split;
+use Filament\Forms\Components\Group;
 
 class AgentResource extends Resource
 {
@@ -26,23 +26,29 @@ class AgentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('username')
-                    ->maxLength(255),
-                Forms\Components\FileUpload::make('profile_picture')
-                    ->image()
-                    ->imageEditor(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone_number')
-                    ->tel()
-                    ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
-                Forms\Components\Toggle::make('status')
-                    ->required(),
-            ]);
+                Section::make('Personal Information')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('username')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')
+                            ->email()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('phone_number')
+                            ->tel()
+                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                    ])->columnSpan(2)->columns(2),
+                Section::make('Meta')->schema([
+                    Forms\Components\Toggle::make('status')
+                        ->required(),
+                    Forms\Components\FileUpload::make('profile_picture')
+                        ->image()
+                        ->imageEditor(),
+                ])->columnSpan(1),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -63,8 +69,8 @@ class AgentResource extends Resource
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
-                ->label('Created At')
-                ->since(),
+                    ->label('Created At')
+                    ->since(),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //

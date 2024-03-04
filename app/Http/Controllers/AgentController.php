@@ -17,7 +17,7 @@ class AgentController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string',
             'email' => 'required|email:rfc,dns|unique:agents',
             'phone_number' => 'required|numeric|unique:agents',
             'notification_token' => 'string|nullable',

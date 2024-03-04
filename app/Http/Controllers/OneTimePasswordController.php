@@ -85,7 +85,9 @@ class OneTimePasswordController extends Controller
         );
 
         $device->tokens()->delete();
-        $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
+        // $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
+        $token = $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
+        $device->update(['token' => $token]);
 
         return response()->json([
             'message' => 'OTP validated successfully',
