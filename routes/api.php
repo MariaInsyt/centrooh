@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\AgentDistrictController;
 use App\Http\Controllers\BillboardController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\DeviceController;
@@ -43,6 +44,14 @@ Route::controller(DeviceController::class)
     ->group(
     function () {
         Route::post('/ping', 'ping');
+    }
+);
+
+Route::controller(AgentDistrictController::class)
+    ->middleware('auth:sanctum')
+    ->group(
+    function () {
+        Route::get('/agent/districts', 'agentDistricts');
     }
 );
 

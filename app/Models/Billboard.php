@@ -32,6 +32,7 @@ class Billboard extends Model
         'lat',
         'lng',
         'location',
+        'address',
     ];
 
     protected $hidden = [
@@ -43,10 +44,6 @@ class Billboard extends Model
         'is_active' => 'boolean',
     ];
 
-
-    protected $appends = [
-        'location',
-    ];
 
     //Scope Active
     public function scopeActive($query)
@@ -72,46 +69,6 @@ class Billboard extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class);
-    }
-
-    /**
-    * Returns the 'lat' and 'lng' attributes as the computed 'location' attribute,
-    * as a standard Google Maps style Point array with 'lat' and 'lng' attributes.
-    *
-    * Used by the Filament Google Maps package.
-    *
-    * Requires the 'location' attribute be included in this model's $fillable array.
-    *
-    * @return array
-    */
-
-    public function getLocationAttribute(): array
-    {
-        return [
-            "lat" => (float)$this->lat,
-            "lng" => (float)$this->lng,
-        ];
-    }
-
-    /**
-    * Takes a Google style Point array of 'lat' and 'lng' values and assigns them to the
-    * 'lat' and 'lng' attributes on this model.
-    *
-    * Used by the Filament Google Maps package.
-    *
-    * Requires the 'location' attribute be included in this model's $fillable array.
-    *
-    * @param ?array $location
-    * @return void
-    */
-    public function setLocationAttribute(?array $location): void
-    {
-        if (is_array($location))
-        {
-            $this->attributes['lat'] = $location['lat'];
-            $this->attributes['lng'] = $location['lng'];
-            unset($this->attributes['location']);
-        }
     }
 
     /**
