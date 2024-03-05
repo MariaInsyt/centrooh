@@ -99,7 +99,7 @@ class AgentController extends Controller
         ], 200);
     }
 
-    protected function createUserName($name)
+    public static function createUserName($name)
     {
         $username = str()->snake(strtolower($name));
 

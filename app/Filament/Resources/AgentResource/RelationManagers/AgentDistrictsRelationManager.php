@@ -18,16 +18,17 @@ class AgentDistrictsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('agent_id')
-                    ->searchable()
-                    ->relationship('agent', 'name')
-                    ->preload()
-                    ->required(),
+                // Forms\Components\Select::make('agent_id')
+                //     ->searchable()
+                //     ->relationship('agent', 'name')
+                //     ->preload()
+                //     ->required(),
                 Forms\Components\Select::make('district_id')
                     ->searchable()
                     ->relationship('district', 'name')
                     ->required(),
                 Forms\Components\Toggle::make('is_active')
+                    ->default(true)
                     ->required(),
                 // Forms\Components\Toggle::make('is_primary')
                     // ->required(),
@@ -42,6 +43,7 @@ class AgentDistrictsRelationManager extends RelationManager
                 // Tables\Columns\TextColumn::make('agent.name'),
                 Tables\Columns\TextColumn::make('district.name'),
                 Tables\Columns\IconColumn::make('is_active')
+                    ->label('Status')
                     ->boolean(),
                 // Tables\Columns\IconColumn::make('is_primary')
                     // ->boolean(),
@@ -65,13 +67,16 @@ class AgentDistrictsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
+            ])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 }
