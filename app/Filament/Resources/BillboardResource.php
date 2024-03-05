@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use App\Models\District;
 use App\Models\Agent;
+use Filament\Forms\Components\Section;
 
 class BillboardResource extends Resource
 {
@@ -26,81 +27,97 @@ class BillboardResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'pending' => 'Pending',
-                        'updated' => 'Updated',
-                        'notupdated' => 'Not Updated',
-                        'rejected' => 'rejected'
-                    ])
-                    ->default('pending')
-                    ->required(),
-                Forms\Components\Select::make('district_id')
-                    ->label('District')
-                    ->options(District::active()->get()->pluck('name', 'id')->toArray())
-                    ->searchable()
-                    ->required(),
-                Forms\Components\Select::make('agent_id')
-                    ->label('Agent')
-                    ->options(Agent::active()->get()->pluck('name', 'id')->toArray())
-                    ->searchable(),
-                Forms\Components\Toggle::make('is_active')
-                    ->default(true)
-                    ->required(),
-                Map::make('map')
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
-                        $set('lat', $state['lat']);
-                        $set('lng', $state['lng']);
-                    })
-                    ->mapControls([
-                        'mapTypeControl'    => false,
-                        'scaleControl'      => true,
-                        'streetViewControl' => false,
-                        'rotateControl'     => false,
-                        'fullscreenControl' => true,
-                        'searchBoxControl'  => false,
-                        'zoomControl'       => true,
-                    ])
-                    ->height(fn () => '400px')
-                    ->defaultZoom(15)
-                    ->defaultLocation(fn ($record) => [
-                        $record->lat ?? 0.3401327,
-                        $record->lng ?? 32.5864384,
-                    ])
-                    ->draggable()
-                    ->clickable(false)
-                    ->autocomplete('location')
-                    ->autocompleteReverse()
-                    ->geolocate()
-                    ->geolocateOnLoad(true, false)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('lat')
-                    ->label('Latitude')
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
-                        $set('map', [
-                            'lat' => floatVal($state),
-                            'lng' => floatVal($get('longitude')),
-                        ]);
-                    })
-                    ->lazy(),
-                Forms\Components\TextInput::make('lng')
-                    ->label('Longitude')
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
-                        $set('map', [
-                            'lat' => floatval($get('latitude')),
-                            'lng' => floatVal($state),
-                        ]);
-                    })
-                    ->lazy(),
-                // Forms\Components\TextInput::make('location')
-                //     ->maxLength(1024),
-            ]);
+                Section::make('Billboard Information')->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255),
+                    Forms\Components\Select::make('status')
+                        ->options([
+                            'pending' => 'Pending',
+                            'updated' => 'Updated',
+                            'notupdated' => 'Not Updated',
+                            'rejected' => 'rejected'
+                        ])
+                        ->default('pending')
+                        ->required(),
+                ])->columnSpan(2),
+                Section::make('Billboard Status')->schema([
+                    Forms\Components\Toggle::make('is_active')
+                        ->default(true),
+                    Forms\Components\Select::make('agent_id')
+                        ->label('Agent')
+                        ->options(Agent::active()->get()->pluck('name', 'id')->toArray())
+                        ->searchable(),
+                ])->columnSpan(1),
+                Section::make('Location Information')->schema([
+                    Forms\Components\Select::make('district_id')
+                        ->label('District')
+                        ->options(District::active()->get()->pluck('name', 'id')->toArray())
+                        ->searchable()
+                        ->required(),
+                    Forms\Components\Textarea::make('address')
+                        ->label('Address')
+                        ->autosize()
+                        ->maxLength(1024)
+                        ->required(),
+                    Forms\Components\TextInput::make('location')
+                        ->label('Location')
+                        ->placeholder('Start typing to search for a location')
+                        ->maxLength(1024)
+                        ->required(),
+                    Map::make('map')
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                            $set('lat', $state['lat']);
+                            $set('lng', $state['lng']);
+                        })
+                        ->mapControls([
+                            'mapTypeControl'    => false,
+                            'scaleControl'      => true,
+                            'streetViewControl' => false,
+                            'rotateControl'     => false,
+                            'fullscreenControl' => true,
+                            'searchBoxControl'  => false,
+                            'zoomControl'       => true,
+                        ])
+                        ->height(fn () => '800px')
+                        ->defaultZoom(12)
+                        ->defaultLocation(fn ($record) => [
+                            $record->lat ?? 0.3401327,
+                            $record->lng ?? 32.5864384,
+                        ])
+                        ->draggable()
+                        ->clickable(false)
+                        ->autocomplete('location', placeField: 'name', types: [
+                            'geocode',
+                            'establishment',
+                        ], countries: ['UG'])
+                        ->autocompleteReverse()
+                        ->geolocate()
+                        ->geolocateOnLoad(true, false)
+                        ->columnSpanFull(),
+                    Forms\Components\TextInput::make('lat')
+                        ->label('Latitude')
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                            $set('map', [
+                                'lat' => floatVal($state),
+                                'lng' => floatVal($get('longitude')),
+                            ]);
+                        })
+                        ->lazy(),
+                    Forms\Components\TextInput::make('lng')
+                        ->label('Longitude')
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                            $set('map', [
+                                'lat' => floatval($get('latitude')),
+                                'lng' => floatVal($state),
+                            ]);
+                        })
+                        ->lazy(),
+                ])->columns(2)
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
