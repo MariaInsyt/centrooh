@@ -12,7 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Group;
+use App\Http\Controllers\AgentController;
 
 class AgentResource extends Resource
 {
@@ -30,9 +30,19 @@ class AgentResource extends Resource
                     ->collapsible()
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->regex('/^[a-zA-Z\s]*$/')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, string $state, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('username', AgentController::createUserName($state));
+                                } else {
+                                    return;
+                                }
+                            })
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('username')
+                            ->readOnly()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('email')
                             ->email()

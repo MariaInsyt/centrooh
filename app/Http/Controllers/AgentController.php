@@ -99,35 +99,7 @@ class AgentController extends Controller
         ], 200);
     }
 
-    public function agentDistricts(Request $request)
-    {
-        $districts = AgentDistrict::where('agent_id', $request->user()->agent_id)
-            ->with([
-                'district'
-            ])
-            ->get();
-
-        return response()->json([
-            'districts' => $districts
-        ]);
-    }
-
-    public function agentBillBoardsInDistrict(Request $request)
-    {
-        $district = $request->district_id;
-
-        $billboards = Billboard::whereHas('district', function ($query) use ($district) {
-            $query->where('district_id', $district);
-        })
-            ->where('agent_id', $request->user()->agent_id)
-            ->get();
-
-        return response()->json([
-            'billboards' => $billboards
-        ]);
-    }
-
-    protected function createUserName($name)
+    public static function createUserName($name)
     {
         $username = str()->snake(strtolower($name));
 

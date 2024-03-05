@@ -21,22 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(OneTimePasswordController::class)->group(
-    function () {
-        Route::post('/otp', 'sendOtp');
-        Route::post('/otp/verify', 'verifyOtp');
-    }
-);
-
-Route::post('/agent/register', [AgentController::class, 'create']);
-
 Route::controller(AgentController::class)
     ->middleware('auth:sanctum')
     ->group(
     function () {
         Route::get('/agent', 'agent');
-        Route::get('/agent/districts', 'agentDistricts');
-        Route::get('/agent/billboards', 'agentBillBoardsInDistrict');
     }
 );
 
@@ -45,6 +34,7 @@ Route::controller(BillboardController::class)
     ->group(
     function () {
         Route::get('/billboard', 'billboard');
+        Route::get('/billboard/agent', 'agentBillboards');
     }
 );
 
@@ -55,3 +45,12 @@ Route::controller(DeviceController::class)
         Route::post('/ping', 'ping');
     }
 );
+
+Route::controller(OneTimePasswordController::class)->group(
+    function () {
+        Route::post('/otp', 'sendOtp');
+        Route::post('/otp/verify', 'verifyOtp');
+    }
+);
+
+Route::post('/agent/register', [AgentController::class, 'create']);
