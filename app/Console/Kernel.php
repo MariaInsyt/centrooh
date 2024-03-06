@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,9 +13,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
-        //delete expired otps
+        $schedule->command('app:check-for-expired-one-time-passwords')->everyMinute()
+            ->onSuccess(function () {
+                Log::info('Expired one-time passwords checked and updated.');
+            })
+            ->onFailure(function () {
+                Log::error('Expired one-time passwords check failed.');
+            });
     }
 
     /**

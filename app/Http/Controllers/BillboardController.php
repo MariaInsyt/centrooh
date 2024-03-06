@@ -32,6 +32,7 @@ class BillboardController extends Controller
             return response()->json([
                 'billboards' => $agent->billboards()
                     ->active()
+                    ->orderBy('updated_at', 'desc')
                     ->with('district:id,name')
                     ->get()
 
