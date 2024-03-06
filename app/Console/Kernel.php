@@ -16,10 +16,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
         $schedule->command('app:check-for-expired-one-time-passwords')->everyMinute()
             ->onSuccess(function () {
-                Log::info('Expired one-time passwords checked and updated.');
+                // Log::info('Expired one-time passwords checked and updated.');
             })
             ->onFailure(function () {
-                Log::error('Expired one-time passwords check failed.');
+                // Log::error('Expired one-time passwords check failed.');
             });
     }
 
