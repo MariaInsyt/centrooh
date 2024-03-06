@@ -38,14 +38,24 @@ class Billboard extends Model
     protected $hidden = [
         'created_at',
         'deleted_at',
+        'created_by',
+        'updated_at',
+        'district_id',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
 
+    protected $appends = [
+        'updated_at_human',
+    ];
 
-    //Scope Active
+    public function getUpdatedAtHumanAttribute()
+    {
+        return $this->updated_at->diffForHumans();
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
