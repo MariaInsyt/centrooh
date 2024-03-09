@@ -21,7 +21,7 @@ class EditBillboard extends EditRecord
 
     protected function beforeSave(): void
     {
-        $agent = Agent::find($this->record->agent_id);
+        $agent = Agent::find($this->getRecord()->agent_id);
         $agent_districts = $agent->agentDistricts->pluck('district_id')->toArray();
         $billboard_district = $this->record->district_id;
 
