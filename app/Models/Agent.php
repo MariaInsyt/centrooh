@@ -38,6 +38,11 @@ class Agent extends Model
         return $query->where('status', true);
     }
 
+    public function scopeWithDistricts($query)
+    {
+        return $query->where('status', true)->whereHas('agentDistricts');
+    }
+
     public function billboards()
     {
         return $this->hasMany(Billboard::class);
