@@ -34,8 +34,8 @@ Route::controller(BillboardController::class)
     ->middleware('auth:sanctum')
     ->group(
     function () {
-        Route::get('/billboard', 'billboard');
-        Route::get('/billboard/agent', 'agentBillboards');
+        Route::get('/billboard/{billboardId}', 'billboard');
+        Route::get('/billboards/agent', 'agentBillboards');
     }
 );
 

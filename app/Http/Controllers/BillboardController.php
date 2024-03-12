@@ -12,8 +12,8 @@ class BillboardController extends Controller
     //
     public function billboard(Request $request)
     {
-        $billboard = Billboard::active()->find($request->billboard_id);
-
+        $billboard = Billboard::active()->find($request->billboardId);
+        
         if ($billboard) {
             return response()->json([
                 'billboard' => $billboard
