@@ -1,14 +1,14 @@
 name: Deployment
-
 on:
   pull_request:
     branches:
       - develop
-
 jobs:
-  deploy:
+  build:
+    name: Run deployment script
     runs-on: ubuntu-latest
-      name: Run deployment script
+    steps:
+      - name: Deploy script
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
