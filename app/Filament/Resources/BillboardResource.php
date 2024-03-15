@@ -52,7 +52,7 @@ class BillboardResource extends Resource
                             fn (string $search) => Agent::withDistricts()
                             ->where('name', 'like', '%' . $search . '%')
                             ->orWhere('phone_number', 'like', '%' . $search . '%')
-                            ->limit(50)->pluck('name', 'id')->toArray()
+                            ->limit(10)->pluck('name', 'id')->toArray()
                         )
                         ->getOptionLabelUsing(fn ($value) => 
                         Agent::find($value)->name . ' - ' . Agent::find($value)->phone_number
