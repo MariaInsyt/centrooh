@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Billboard;
 use App\Models\AgentDistrict;
 use App\Models\Device;
+use App\Models\AgentNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -56,5 +57,10 @@ class Agent extends Model
     public function devices()
     {
         return $this->hasMany(Device::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(AgentNotification::class);
     }
 }

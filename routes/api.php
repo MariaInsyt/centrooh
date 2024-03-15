@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentDistrictController;
+use App\Http\Controllers\AgentNotificationController;
 use App\Http\Controllers\BillboardController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\DeviceController;
@@ -52,6 +53,15 @@ Route::controller(AgentDistrictController::class)
     ->group(
     function () {
         Route::get('/agent/districts', 'agentDistricts');
+    }
+);
+
+Route::controller(AgentNotificationController::class)
+    ->middleware('auth:sanctum')
+    ->group(
+    function () {
+        Route::get('/agent/notifications', 'agentNotifications');
+        Route::patch('/agent/notifications/mark-as-read', 'markAsRead');
     }
 );
 
