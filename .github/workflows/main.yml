@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-      - name: Run deployment script
+      name: Run deployment script
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
