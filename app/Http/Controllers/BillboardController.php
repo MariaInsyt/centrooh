@@ -42,13 +42,12 @@ class BillboardController extends Controller
             ];
         });
 
-
         if ($agent) {
             return response()->json([
                 'billboards' => $agent->billboards()
                     ->active()
                     ->orderBy('updated_at', 'desc')
-                    ->simplePaginate(10),
+                    ->get(),
                 'districts' => $districts
             ]);
         } else {
