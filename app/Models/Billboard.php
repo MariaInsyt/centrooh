@@ -39,7 +39,6 @@ class Billboard extends Model
         'created_at',
         'deleted_at',
         'created_by',
-        'updated_at',
     ];
 
     protected $casts = [

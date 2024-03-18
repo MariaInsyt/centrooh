@@ -26,44 +26,46 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(AgentController::class)
     ->middleware('auth:sanctum')
     ->group(
-    function () {
-        Route::get('/agent', 'agent');
-    }
-);
+        function () {
+            Route::get('/agent', 'agent');
+        }
+    );
 
 Route::controller(BillboardController::class)
     ->middleware('auth:sanctum')
     ->group(
-    function () {
-        Route::get('/billboard/{billboardId}', 'billboard');
-        Route::get('/billboards/agent', 'agentBillboards');
-    }
-);
+        function () {
+            Route::get('/billboard/{billboardId}', 'billboard');
+            Route::get('/agent/billboards', 'agentBillboards');
+            Route::get('/billboards/coordinates', 'agentBillboardsCoordinates');
+            Route::get('/billboards', 'allBillboards');
+        }
+    );
 
 Route::controller(DeviceController::class)
     ->middleware('auth:sanctum')
     ->group(
-    function () {
-        Route::post('/ping', 'ping');
-    }
-);
+        function () {
+            Route::post('/ping', 'ping');
+        }
+    );
 
 Route::controller(AgentDistrictController::class)
     ->middleware('auth:sanctum')
     ->group(
-    function () {
-        Route::get('/agent/districts', 'agentDistricts');
-    }
-);
+        function () {
+            Route::get('/agent/districts', 'agentDistricts');
+        }
+    );
 
 Route::controller(AgentNotificationController::class)
     ->middleware('auth:sanctum')
     ->group(
-    function () {
-        Route::get('/agent/notifications', 'agentNotifications');
-        Route::patch('/agent/notifications/mark-as-read', 'markAsRead');
-    }
-);
+        function () {
+            Route::get('/agent/notifications', 'agentNotifications');
+            Route::patch('/agent/notifications/mark-as-read', 'markAsRead');
+        }
+    );
 
 Route::controller(OneTimePasswordController::class)->group(
     function () {
