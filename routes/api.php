@@ -38,6 +38,7 @@ Route::controller(BillboardController::class)
             Route::get('/billboard/{billboardId}', 'billboard');
             Route::get('/agent/billboards', 'agentBillboards');
             Route::get('/billboards/coordinates', 'agentBillboardsCoordinates');
+            Route::get('/billboards', 'allBillboards');
         }
     );
 

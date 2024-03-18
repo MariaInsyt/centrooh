@@ -57,6 +57,25 @@ class BillboardController extends Controller
         }
     }
 
+
+    public function allBillboards(Request $request)
+    {
+        $agent = Agent::find($request->user()->agent_id);
+        
+        if ($agent) {
+            return response()->json([
+                'billboards' => $agent->billboards()
+                    ->active()
+                    ->orderBy('updated_at', 'desc')
+                    ->paginate(5),
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Agent not found'
+            ], 404);
+        }
+    }
+
     public function agentBillboardsCoordinates(Request $request)
     {
         $agent = Agent::find($request->user()->agent_id);
@@ -71,6 +90,7 @@ class BillboardController extends Controller
                         'lng',
                         'name',
                         'address',
+                        'location',
                         'status',
                         'updated_at',
                     ]);
