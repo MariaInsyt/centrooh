@@ -12,7 +12,6 @@ class AgentNotification extends Model
 {
     use HasFactory, SoftDeletes;
 
-    //Set user_id on creating
     public static function boot()
     {
         parent::boot();
@@ -20,6 +19,8 @@ class AgentNotification extends Model
             $notification->user_id = auth()->id();
         });
     }
+
+    //Todo: Make prunable
 
     protected $fillable = [
         'agent_id',
