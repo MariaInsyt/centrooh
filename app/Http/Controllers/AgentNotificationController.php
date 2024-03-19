@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Agent;
+use App\Notifications\AccountActivated;
 
 class AgentNotificationController extends Controller
 {
@@ -55,5 +56,35 @@ class AgentNotificationController extends Controller
                 'message' => 'Agent not found'
             ], 404);
         }
+    }
+
+    //To be removed. Testing purpose only
+    public function sendNotification(Request $request)
+    {
+        $agent = Agent::find($request->user()->agent_id);
+
+        if ($agent) {
+            $device = $agent->devices()->active()->first();
+
+            if ($device) {
+                try {
+                    $device->notify(new AccountActivated());
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'message' => 'Failed to send notification',
+                        'error' => $e->getMessage(),
+                    ], 500);
+                }
+            } else {
+                return response()->json([
+                    'message' => 'Device not found',
+                ], 404);
+            }
+        } else {
+            return response()->json([
+                'message' => 'Agent not found'
+            ], 404);
+        }
+
     }
 }

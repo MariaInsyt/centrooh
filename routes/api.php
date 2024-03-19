@@ -64,6 +64,7 @@ Route::controller(AgentNotificationController::class)
         function () {
             Route::get('/agent/notifications', 'agentNotifications');
             Route::patch('/agent/notifications/mark-as-read', 'markAsRead');
+            Route::post('/agent/account-activated', 'sendNotification'); //To be removed. Testing purpose only
         }
     );
 
