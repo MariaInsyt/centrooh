@@ -35,6 +35,11 @@ class Device extends SanctumPersonalAccessToken
         'is_active' => 'boolean',
     ];
 
+    public function routeNotificationForFcm()
+    {
+        return $this->notification_token;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
