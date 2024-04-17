@@ -55,8 +55,16 @@ class AgentResource extends Resource
                     Forms\Components\Toggle::make('status')
                         ->required(),
                     Forms\Components\FileUpload::make('profile_picture')
+                        ->disk('do')
+                        ->directory('profilepictures')
                         ->image()
-                        ->imageEditor(),
+                        ->imageEditor()
+                        ->imageEditorAspectRatios([
+                            null,
+                            '16:9',
+                            '4:3',
+                            '1:1',
+                        ]),
                 ])->columnSpan(1),
             ])->columns(3);
     }
