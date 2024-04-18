@@ -9,6 +9,7 @@ use App\Models\AgentNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 class Agent extends Model
 {
     use HasFactory, SoftDeletes;
@@ -35,7 +36,7 @@ class Agent extends Model
 
     public function getProfilePictureAttribute($value)
     {
-        return $value ? asset($value) : null;
+        return $value ? Storage::url($value) : null;
     }
 
     public function scopeActive($query)
