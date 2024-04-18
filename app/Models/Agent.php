@@ -33,6 +33,11 @@ class Agent extends Model
         'status' => 'boolean',
     ];
 
+    public function getProfilePictureAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', true);
