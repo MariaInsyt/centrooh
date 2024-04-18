@@ -34,9 +34,11 @@ class Agent extends Model
         'status' => 'boolean',
     ];
 
-    public function getProfilePictureAttribute($value)
+    protected $appends = ['profile_picture_url'];
+
+    public function getProfilePictureUrlAttribute()
     {
-        return $value ? Storage::url($value) : null;
+        return $this->profile_picture ? Storage::url($this->profile_picture) : null;
     }
 
     public function scopeActive($query)
