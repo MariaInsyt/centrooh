@@ -4,6 +4,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentDistrictController;
 use App\Http\Controllers\AgentNotificationController;
 use App\Http\Controllers\BillboardController;
+use App\Http\Controllers\BillboardImageController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\DeviceController;
 use Illuminate\Http\Request;
@@ -76,3 +77,5 @@ Route::controller(OneTimePasswordController::class)->group(
 );
 
 Route::post('/agent/register', [AgentController::class, 'create']);
+
+Route::post('/store/billboard/image', [BillboardImageController::class, 'storeBillboardImage']);
