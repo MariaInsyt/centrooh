@@ -50,12 +50,13 @@ class BillboardResource extends Resource
                         // ->options(Agent::active()->get()->pluck('name', 'id')->toArray())
                         ->getSearchResultsUsing(
                             fn (string $search) => Agent::withDistricts()
-                            ->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('phone_number', 'like', '%' . $search . '%')
-                            ->limit(10)->pluck('name', 'id')->toArray()
+                                ->where('name', 'like', '%' . $search . '%')
+                                ->orWhere('phone_number', 'like', '%' . $search . '%')
+                                ->limit(10)->pluck('name', 'id')->toArray()
                         )
-                        ->getOptionLabelUsing(fn ($value) => 
-                        Agent::find($value)->name . ' - ' . Agent::find($value)->phone_number
+                        ->getOptionLabelUsing(
+                            fn ($value) =>
+                            Agent::find($value)->name . ' - ' . Agent::find($value)->phone_number
                         )
                         ->helperText('Search for active agents with name or phone number(256...).'),
                 ])->columnSpan(2),
@@ -126,7 +127,10 @@ class BillboardResource extends Resource
                             ]);
                         })
                         ->lazy(),
-                ])->columns(2)
+                ])
+                    ->collapsible()
+                    ->persistCollapsed()
+                    ->columns(2)
             ])->columns(4);
     }
 

@@ -18,8 +18,7 @@ class ImagesRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
-            ]);
+            ->schema([]);
     }
 
     public function table(Table $table): Table
@@ -28,11 +27,22 @@ class ImagesRelationManager extends RelationManager
             ->recordTitleAttribute('billboard_id')
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
+                    ->defaultImageUrl(url('https://placehold.co/600x400'))
+                    ->visibility('private')
+                    ->width(70)
+                    ->height(70)
+                    ->square()
                     ->label('Image'),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Active'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
+                    ->since(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Last Updated')
                     ->since(),
-            ])
+            ])->defaultSort('created_at', 'desc')
+            ->poll(10)
             ->filters([
                 //
             ])
