@@ -109,4 +109,22 @@ class AgentController extends Controller
         }
         return $username;
     }
+
+    //Billboard stats
+    public function billboardStats(Request $request)
+    {
+        $agent = Agent::find($request->user()->agent_id);
+        
+        if (!$agent) {
+            return response()->json([
+                'message' => 'Agent not found'
+            ], 404);
+        }
+
+        $billboards = $agent->billboards->active()->count();
+
+        return response()->json([
+            'billboards' => $billboards
+        ], 200);
+    }
 }
