@@ -35,7 +35,7 @@ class BillboardImageController extends Controller
             return response()->json([
                 'message' => 'Image upload failed.',
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 422);
         }
 
         if ($path) {
