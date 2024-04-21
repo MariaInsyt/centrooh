@@ -42,7 +42,6 @@ class ImagesRelationManager extends RelationManager
                     ->label('Last Updated')
                     ->since(),
             ])->defaultSort('created_at', 'desc')
-            ->poll(120)
             ->filters([
                 //
             ])
