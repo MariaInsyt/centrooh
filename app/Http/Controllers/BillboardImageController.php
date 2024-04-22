@@ -45,12 +45,13 @@ class BillboardImageController extends Controller
             ]);
 
             $billboard->update([
-                'status' => 'pending',
+                'status' => 'in_review',
+                'updated_at' => now(),
             ]);
         }
 
         return response()->json([
-            'message' => 'Image uploaded successfully',
+            'message' => 'Image uploaded successfully.',
         ], 201);
     }
 }
