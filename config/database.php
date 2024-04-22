@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+use Doctrine\DBAL\Types\StringType;
 
 return [
 
@@ -147,5 +148,9 @@ return [
         ],
 
     ],
-
+    'dbal' => [
+        'types' => [
+            'enum' => StringType::class,
+        ],
+    ],
 ];
