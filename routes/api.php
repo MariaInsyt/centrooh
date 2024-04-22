@@ -76,6 +76,6 @@ Route::controller(OneTimePasswordController::class)->group(
     }
 );
 
-Route::post('/agent/register', [AgentController::class, 'create']);
+Route::middleware('auth:sanctum')->post('/store/billboard/image', [BillboardImageController::class, 'storeBillboardImage']);
 
-Route::post('/store/billboard/image', [BillboardImageController::class, 'storeBillboardImage']);
+Route::post('/agent/register', [AgentController::class, 'create']);
