@@ -13,7 +13,12 @@ class BillboardController extends Controller
     //
     public function billboard(Request $request)
     {
-        $billboard = Billboard::active()->find($request->billboardId);
+        $billboard = Billboard::active()
+            ->with(['images' => function ($query) {
+                $query->select('id', 'billboard_id', 'image', 'is_active');
+                $query->active();
+            }])
+            ->find($request->billboardId);
 
         if ($billboard) {
             return response()->json([
@@ -61,11 +66,15 @@ class BillboardController extends Controller
     public function allBillboards(Request $request)
     {
         $agent = Agent::find($request->user()->agent_id);
-        
+
         if ($agent) {
             return response()->json([
                 'billboards' => $agent->billboards()
                     ->active()
+                    ->with(['images' => function ($query) {
+                        $query->select('id', 'billboard_id', 'image', 'is_active');
+                        $query->active();
+                    }])
                     ->orderBy('updated_at', 'desc')
                     ->paginate(5),
             ]);

@@ -12,7 +12,7 @@ class BillboardImageObserver
      */
     public function created(BillboardImage $billboardImage): void
     {
-        Log::info('Billboard Image Created: ' . $billboardImage->id);
+        // Log::info('Billboard Image Created: ' . $billboardImage->id);
     }
 
     /**
@@ -21,6 +21,15 @@ class BillboardImageObserver
     public function updated(BillboardImage $billboardImage): void
     {
         $billboardId = $billboardImage->billboard_id;
+        $activeImages = BillboardImage::active()->where('billboard_id', $billboardId)->get();
+
+        if (count($activeImages) > 1) {
+            foreach ($activeImages as $image) {
+                if ($image->id !== $billboardImage->id) {
+                    $image->update(['is_active' => 0]);
+                }
+            }
+        }
     }
 
     /**
