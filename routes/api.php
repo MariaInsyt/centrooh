@@ -29,6 +29,7 @@ Route::controller(AgentController::class)
     ->group(
         function () {
             Route::get('/agent', 'agent');
+            Route::get('/agent/billboard/statistics', 'billboardStats');
         }
     );
 

@@ -3,8 +3,6 @@
 namespace App\Observers;
 
 use App\Models\BillboardImage;
-use Illuminate\Support\Facades\Log;
-
 class BillboardImageObserver
 {
     /**

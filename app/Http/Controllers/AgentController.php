@@ -29,13 +29,13 @@ class AgentController extends Controller
         $phone_verified = OneTimePassword::where('phone_number', $request->phone_number)
             ->whereNotNull('phone_number_verified_at')
             ->first();
-         
+
         if (!$phone_verified) {
             return response()->json([
                 'message' => 'Phone number not verified'
             ], 400);
         }
-            
+
         DB::transaction(function () use ($request, &$agent, &$token) {
             try {
                 $agent = Agent::create([
@@ -110,21 +110,18 @@ class AgentController extends Controller
         return $username;
     }
 
-    //Billboard stats
     public function billboardStats(Request $request)
     {
         $agent = Agent::find($request->user()->agent_id);
-        
+
         if (!$agent) {
             return response()->json([
                 'message' => 'Agent not found'
             ], 404);
         }
-
-        $billboards = $agent->billboards->active()->count();
-
         return response()->json([
-            'billboards' => $billboards
+            'totalBillboards' => $agent->billboards->count(),
+            'reoccurringBillboards' => $agent->billboards->where('update_interval', 'weekly')->count()
         ], 200);
     }
 }

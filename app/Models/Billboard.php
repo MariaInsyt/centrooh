@@ -33,6 +33,7 @@ class Billboard extends Model
         'lng',
         'location',
         'address',
+        'update_interval'
     ];
 
     protected $hidden = [
@@ -56,7 +57,7 @@ class Billboard extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', 1);
     }
 
     public function district()
