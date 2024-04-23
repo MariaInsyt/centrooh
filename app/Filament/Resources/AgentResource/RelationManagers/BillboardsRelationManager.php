@@ -38,12 +38,20 @@ class BillboardsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('status')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending' => 'Pending',
+                        'updated' => 'Updated',
+                        'notupdated' => 'Not Updated',
+                        'rejected' => 'Rejected',
+                        'in_review' => 'Needs Review',
+                    })
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'pending' => 'gray',
                         'updated' => 'success',
                         'notupdated' => 'warning',
                         'rejected' => 'danger',
+                        'in_review' => 'info',
                     }),
                 Tables\Columns\TextColumn::make('district.name')
                     ->sortable(),
