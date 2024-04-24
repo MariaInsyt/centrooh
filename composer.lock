@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f53ea4da8feda4abb8d441a95dfa21f",
+    "content-hash": "1183fa2fb315c04ce082652cc25dfe99",
     "packages": [
         {
             "name": "africastalking/africastalking",
@@ -6237,6 +6237,71 @@
                 }
             ],
             "time": "2023-11-12T21:59:55+00:00"
+        },
+        {
+            "name": "protonemedia/laravel-cross-eloquent-search",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/protonemedia/laravel-cross-eloquent-search.git",
+                "reference": "cadbd5a5905d854a1df8155636e73aa2bb76397f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/protonemedia/laravel-cross-eloquent-search/zipball/cadbd5a5905d854a1df8155636e73aa2bb76397f",
+                "reference": "cadbd5a5905d854a1df8155636e73aa2bb76397f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0",
+                "php": "^8.2|^8.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4.4",
+                "orchestra/testbench": "^8.0|^9.0",
+                "phpunit/phpunit": "^10.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ProtoneMedia\\LaravelCrossEloquentSearch\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ProtoneMedia\\LaravelCrossEloquentSearch\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pascal Baljet",
+                    "email": "pascal@protone.media",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel package to search through multiple Eloquent models. Supports pagination, eager loading relations, single/multiple columns, sorting and scoped queries.",
+            "homepage": "https://github.com/protonemedia/laravel-cross-eloquent-search",
+            "keywords": [
+                "laravel-cross-eloquent-search",
+                "protonemedia"
+            ],
+            "support": {
+                "issues": "https://github.com/protonemedia/laravel-cross-eloquent-search/issues",
+                "source": "https://github.com/protonemedia/laravel-cross-eloquent-search/tree/3.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/pascalbaljet",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-12T11:36:47+00:00"
         },
         {
             "name": "psr/cache",

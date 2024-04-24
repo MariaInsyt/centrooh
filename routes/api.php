@@ -7,6 +7,7 @@ use App\Http\Controllers\BillboardController;
 use App\Http\Controllers\BillboardImageController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
@@ -79,3 +80,11 @@ Route::controller(OneTimePasswordController::class)->group(
 Route::middleware('auth:sanctum')->post('/store/billboard/image', [BillboardImageController::class, 'storeBillboardImage']);
 
 Route::post('/agent/register', [AgentController::class, 'create']);
+
+Route::controller(SearchController::class)
+    ->middleware('auth:sanctum')
+    ->group(
+        function () {
+            Route::get('/search', 'search');
+        }
+    );
