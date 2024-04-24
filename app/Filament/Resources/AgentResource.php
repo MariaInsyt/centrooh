@@ -94,6 +94,7 @@ class AgentResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -117,6 +118,7 @@ class AgentResource extends Resource
         return [
             'index' => Pages\ListAgents::route('/'),
             'create' => Pages\CreateAgent::route('/create'),
+            'view' => Pages\ViewAgent::route('/{record}'), // '/{record}
             'edit' => Pages\EditAgent::route('/{record}/edit'),
         ];
     }
