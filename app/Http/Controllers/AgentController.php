@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Device;
-use App\Models\AgentDistrict;
-use App\Models\Billboard;
 use App\Models\OneTimePassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,11 +28,7 @@ class AgentController extends Controller
             ->whereNotNull('phone_number_verified_at')
             ->first();
 
-        if (!$phone_verified) {
-            return response()->json([
-                'message' => 'Phone number not verified'
-            ], 400);
-        }
+        if (!$phone_verified) abort(400, 'Phone number not verified');
 
         DB::transaction(function () use ($request, &$agent, &$token) {
             try {
@@ -88,11 +82,7 @@ class AgentController extends Controller
     {
         $agent = Agent::find($request->user()->agent_id);
 
-        if (!$agent) {
-            return response()->json([
-                'message' => 'Agent not found'
-            ], 404);
-        }
+        if (!$agent) abort(404, 'Agent not found');
 
         return response()->json([
             'agent' => $agent
@@ -104,6 +94,7 @@ class AgentController extends Controller
         $username = str()->snake(strtolower($name));
 
         $count = Agent::where('username', $username)->count();
+
         if ($count > 0) {
             $username = $username . $count;
         }
@@ -114,11 +105,8 @@ class AgentController extends Controller
     {
         $agent = Agent::find($request->user()->agent_id);
 
-        if (!$agent) {
-            return response()->json([
-                'message' => 'Agent not found'
-            ], 404);
-        }
+        if (!$agent) abort(404, 'Agent not found');
+
         return response()->json([
             'totalBillboards' => $agent->billboards->count(),
             'reoccurringBillboards' => $agent->billboards->where('update_interval', 'weekly')->count()

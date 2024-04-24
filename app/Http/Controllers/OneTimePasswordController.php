@@ -52,11 +52,7 @@ class OneTimePasswordController extends Controller
             'status' => 'pending'
         ])->first();
 
-        if (!$otp) {
-            return response()->json([
-                'message' => 'Invalid OTP'
-            ], 404);
-        }
+        if (!$otp) abort(404, 'Invalid OTP');
 
         $otp->update([
             'phone_number_verified_at' => now(),
@@ -85,7 +81,6 @@ class OneTimePasswordController extends Controller
         );
 
         $device->tokens()->delete();
-        // $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
         $token = $device->createToken($device->uuid, ['*'], now()->addWeek())->plainTextToken;
         $device->update(['token' => $token]);
 
@@ -98,7 +93,6 @@ class OneTimePasswordController extends Controller
 
     public function generateRandomNumber()
     {
-        $randomNumber = mt_rand(100000, 999999);
-        return $randomNumber;
+        return mt_rand(100000, 999999);;
     }
 }
