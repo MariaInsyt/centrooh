@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 class Agent extends Model
 {
     use HasFactory, SoftDeletes;
@@ -23,6 +24,8 @@ class Agent extends Model
         'phone_number',
         'status',
         'email_verified_at',
+        'created_by',
+        'approved_by',
     ];
 
     protected $hidden = [
@@ -35,6 +38,18 @@ class Agent extends Model
     ];
 
     protected $appends = ['profile_picture_url'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($agent) {
+            $agent->uuid = Uuid::uuid4();
+            if (auth()->check()) {
+                $agent->created_by = auth()->id();
+            }
+        });
+    }
 
     public function getProfilePictureUrlAttribute()
     {

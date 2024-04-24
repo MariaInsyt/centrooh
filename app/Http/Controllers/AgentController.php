@@ -36,7 +36,7 @@ class AgentController extends Controller
                     'name' => $request->name,
                     'email' => $request->email,
                     'phone_number' => $request->phone_number,
-                    'uuid' => Uuid::uuid4(),
+                    // 'uuid' => Uuid::uuid4(),
                     'username' => $this->createUserName($request->name)
                 ]);
                 sleep(2);
