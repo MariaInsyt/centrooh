@@ -15,6 +15,8 @@ class AgentDistrictController extends Controller
         $agent = Agent::select('id', 'name', 'email', 'phone_number', 'status')
             ->find($request->user()->agent_id);
 
+        if (!$agent) abort(404, 'Agent not found');
+
         $agentDistricts = AgentDistrict::where('agent_id', $agent->id)->with(
             'district:id,name'
         )->get();

@@ -20,11 +20,7 @@ class BillboardImageController extends Controller
 
         $billboard = Billboard::active()->find($request->id);
 
-        if (!$billboard) {
-            return response()->json([
-                'message' => 'Billboard not found',
-            ], 404);
-        }
+        if (!$billboard) abort(404, 'Billboard not found');
 
         $image = $request->file('image');
         $imageName = Str::snake($billboard->name) . '_' . str_replace(" ", "", date("d-m-Y h:i:s")) . '.' . $image->extension();

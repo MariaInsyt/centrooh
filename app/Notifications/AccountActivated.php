@@ -34,7 +34,6 @@ class AccountActivated extends Notification
             body: 'Your account has been activated.',
             image: ''
         )))
-            // ->data(['data1' => 'value', 'data2' => 'value2'])
             ->custom([
                 'android' => [
                     'notification' => [

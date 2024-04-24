@@ -20,20 +20,18 @@ class BillboardController extends Controller
             }])
             ->find($request->billboardId);
 
-        if ($billboard) {
-            return response()->json([
-                'billboard' => $billboard
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Billboard not found'
-            ], 404);
-        }
+        if (!$billboard) abort(404, 'Billboard not found');
+
+        return response()->json([
+            'billboard' => $billboard
+        ]);
     }
 
     public function agentBillboards(Request $request)
     {
         $agent = Agent::find($request->user()->agent_id);
+        
+        if (!$agent) abort(404, 'Agent not found');
 
         $agentDistricts = AgentDistrict::where('agent_id', $agent->id)->with(
             'district:id,name'
@@ -47,19 +45,13 @@ class BillboardController extends Controller
             ];
         });
 
-        if ($agent) {
-            return response()->json([
-                'billboards' => $agent->billboards()
-                    ->active()
-                    ->orderBy('updated_at', 'desc')
-                    ->get(),
-                'districts' => $districts
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Agent not found'
-            ], 404);
-        }
+        return response()->json([
+            'billboards' => $agent->billboards()
+                ->active()
+                ->orderBy('updated_at', 'desc')
+                ->get(),
+            'districts' => $districts
+        ]);
     }
 
 
@@ -67,51 +59,39 @@ class BillboardController extends Controller
     {
         $agent = Agent::find($request->user()->agent_id);
 
-        if ($agent) {
-            return response()->json([
-                'billboards' => $agent->billboards()
-                    ->active()
-                    ->with(['images' => function ($query) {
-                        $query->select('id', 'billboard_id', 'image', 'is_active');
-                        $query->active();
-                    }])
-                    ->orderBy('updated_at', 'desc')
-                    ->paginate(5),
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Agent not found'
-            ], 404);
-        }
+        if (!$agent) abort(404, 'Agent not found');
+
+        return response()->json([
+            'billboards' => $agent->billboards()
+                ->active()
+                ->with(['images' => function ($query) {
+                    $query->select('id', 'billboard_id', 'image', 'is_active');
+                    $query->active();
+                }])
+                ->orderBy('updated_at', 'desc')
+                ->paginate(5),
+        ]);
     }
 
     public function agentBillboardsCoordinates(Request $request)
     {
         $agent = Agent::find($request->user()->agent_id);
 
-        if ($agent) {
-            $billboardsCoordinates = Cache::remember('agentBillboardsCoordinates', 25 * 60, function () use ($agent) {
-                return $agent->billboards()
-                    ->active()
-                    ->get([
-                        'id',
-                        'lat',
-                        'lng',
-                        'name',
-                        'address',
-                        'location',
-                        'status',
-                        'updated_at',
-                    ]);
-            });
+        if (!$agent) abort(404, 'Agent not found');
 
-            return response()->json([
-                'billboardsCoordinates' => $billboardsCoordinates
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Agent not found'
-            ], 404);
-        }
+        return response()->json([
+            'billboardsCoordinates' => $agent->billboards()
+                ->active()
+                ->get([
+                    'id',
+                    'lat',
+                    'lng',
+                    'name',
+                    'address',
+                    'location',
+                    'status',
+                    'updated_at',
+                ])
+        ]);
     }
 }
