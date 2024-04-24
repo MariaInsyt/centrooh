@@ -188,6 +188,7 @@ class BillboardResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -210,6 +211,7 @@ class BillboardResource extends Resource
         return [
             'index' => Pages\ListBillboards::route('/'),
             'create' => Pages\CreateBillboard::route('/create'),
+            'view' => Pages\ViewBillboard::route('/{record}'), // '/{record}
             'edit' => Pages\EditBillboard::route('/{record}/edit'),
         ];
     }
