@@ -28,24 +28,20 @@ class AgentNotificationResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\Select::make('agent_id')
-                //     ->searchable()
-                //     ->relationship('agent', 'name')
-                //     ->preload()
-                //     ->required(),
                 Forms\Components\Select::make('agent_id')
-                ->label('Agent')
-                ->searchable()
-                ->getSearchResultsUsing(
-                    fn (string $search) => Agent::active()
-                    ->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('phone_number', 'like', '%' . $search . '%')
-                    ->limit(10)->pluck('name', 'id')->toArray()
-                )
-                ->getOptionLabelUsing(fn ($value) => 
-                Agent::find($value)->name . ' - ' . Agent::find($value)->phone_number
-                )
-                ->helperText('Search for active agents with name or phone number(256...).'),
+                    ->label('Agent')
+                    ->searchable()
+                    ->getSearchResultsUsing(
+                        fn (string $search) => Agent::active()
+                            ->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('phone_number', 'like', '%' . $search . '%')
+                            ->limit(10)->pluck('name', 'id')->toArray()
+                    )
+                    ->getOptionLabelUsing(
+                        fn ($value) =>
+                        Agent::find($value)->name . ' - ' . Agent::find($value)->phone_number
+                    )
+                    ->helperText('Search for active agents with name or phone number(256...).'),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255)
@@ -69,6 +65,7 @@ class AgentNotificationResource extends Resource
                     ->description(
                         fn (AgentNotification $record): string => $record->message
                     )
+                    ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Sent by')
@@ -77,29 +74,41 @@ class AgentNotificationResource extends Resource
                 Tables\Columns\TextColumn::make('read_at')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('deleted_at')
+                //     ->dateTime()
+                //     ->sortable()
+                //     ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->since(),
+                // Tables\Columns\TextColumn::make('updated_at')
+                //     ->dateTime()
+                //     ->sortable()
+                //     ->toggleable(),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
             ]);
     }
 
