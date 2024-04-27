@@ -3,13 +3,10 @@
 namespace App\Filament\Resources\BillboardImageResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ImagesRelationManager extends RelationManager
 {
@@ -18,7 +15,11 @@ class ImagesRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
-            ->schema([]);
+            ->schema([
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->downloadable(),
+            ]);
     }
 
     public function table(Table $table): Table
@@ -51,6 +52,7 @@ class ImagesRelationManager extends RelationManager
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
