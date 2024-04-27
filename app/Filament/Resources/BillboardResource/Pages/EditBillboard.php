@@ -12,11 +12,14 @@ use Illuminate\Database\Eloquent\Model;
 class EditBillboard extends EditRecord
 {
     protected static string $resource = BillboardResource::class;
-
+    
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\ViewAction::make(),
+            // Actions\DeleteAction::make(),
+            // Actions\ForceDeleteAction::make(),
+            // Actions\RestoreAction::make(),
         ];
     }
 

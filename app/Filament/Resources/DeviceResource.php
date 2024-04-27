@@ -20,8 +20,7 @@ class DeviceResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -44,31 +43,33 @@ class DeviceResource extends Resource
                     ])
                     ->disabled()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('ip_address')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('ip_address')
+                //     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('deleted_at')
+                //     ->dateTime()
+                //     ->sortable()
+                //     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->since(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->since(),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -90,6 +91,6 @@ class DeviceResource extends Resource
 
     public static function canCreate(): bool
     {
-       return false;
+        return false;
     }
 }
