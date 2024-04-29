@@ -31,23 +31,8 @@ class AccountActivated extends Notification
     {
         return (new FcmMessage(notification: new FcmNotification(
             title: 'Account Activated',
-            body: 'Your account has been activated.',
+            body: 'Your Insyt Media Agent Account has been activated.',
             image: ''
-        )))
-            ->custom([
-                'android' => [
-                    'notification' => [
-                        'color' => '#0A0A0A',
-                    ],
-                    'fcm_options' => [
-                        'analytics_label' => 'analytics',
-                    ],
-                ],
-                'apns' => [
-                    'fcm_options' => [
-                        'analytics_label' => 'analytics',
-                    ],
-                ],
-            ]);
+        )));
     }
 }

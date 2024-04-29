@@ -15,6 +15,11 @@ use Filament\Forms\Components\Section;
 use App\Http\Controllers\AgentController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
+use App\Notifications\AccountActivated;
+use Filament\Notifications\Notification;
+use App\Models\Device;
+use Illuminate\Support\Facades\Log;
 
 class AgentResource extends Resource
 {
@@ -61,7 +66,32 @@ class AgentResource extends Resource
                     ])->columnSpan(2)->columns(2),
                 Section::make('Meta')->schema([
                     Forms\Components\Toggle::make('status')
-                        ->required(),
+                        ->default(false)
+                        ->afterStateUpdated(function (?Model $record, string $operation, bool $state, Forms\Set $set) {
+                            if ($operation === 'create') {
+                                $set('status', false);
+                                return;
+                            } else if ($operation === 'edit') {
+                                if (empty($record->devices)) {
+                                    Notification::make()
+                                        ->title('No Devices')
+                                        ->body('Agent must sign in with at least one device before they can be activated.')
+                                        ->warning()
+                                        ->persistent()
+                                        ->send();
+                                    $set('status', false);
+                                    return;
+                                }
+                                if ($state === true) {
+                                    $device = Device::where('agent_id', $record->id)->first();
+                                    try {
+                                        $device->notify(new AccountActivated);
+                                    } catch (\Exception $e) {
+                                        Log::error($e->getMessage());
+                                    }
+                                }
+                            }
+                        }),
                     Forms\Components\FileUpload::make('profile_picture')
                         ->disk('do')
                         ->directory('profilepictures')

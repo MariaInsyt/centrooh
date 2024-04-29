@@ -21,7 +21,7 @@ class BillboardImageObserver
         $billboardId = $billboardImage->billboard_id;
         $activeImages = BillboardImage::active()->where('billboard_id', $billboardId)->get();
 
-        if (count($activeImages) > 1) {
+        if (!empty($activeImages)) {
             foreach ($activeImages as $image) {
                 if ($image->id !== $billboardImage->id) {
                     $image->update(['is_active' => 0]);
