@@ -49,14 +49,14 @@ class AgentResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->email()
                             ->maxLength(255)
-                            ->unique()
+                            // ->unique()
                             ->required(),
                         Forms\Components\TextInput::make('phone_number')
                             ->tel()
                             ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                             ->startsWith('+256')
-                            ->unique()
-                            ->hint('Phone number should start with +256')
+                            // ->unique()
+                            ->hint('Begin +256..')
                             ->required(),
                     ])->columnSpan(2)->columns(2),
                 Section::make('Meta')->schema([
