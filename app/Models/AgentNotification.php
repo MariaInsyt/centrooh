@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\AgentNotificationCategory;
 
 class AgentNotification extends Model
 {
@@ -28,6 +29,7 @@ class AgentNotification extends Model
         'title',
         'message',
         'read_at',
+        'category_id',
     ];
 
     protected $hidden = [
@@ -56,6 +58,11 @@ class AgentNotification extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(AgentNotificationCategory::class);
     }
 
     public function user()
