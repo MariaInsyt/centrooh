@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\AgentNotificationCategory;
 
 class AgentNotificationResource extends Resource
 {
@@ -42,6 +43,24 @@ class AgentNotificationResource extends Resource
                         Agent::find($value)->name . ' - ' . Agent::find($value)->phone_number
                     )
                     ->helperText('Search for active agents with name or phone number(256...).'),
+                Forms\Components\Select::make('category_id')
+                    ->label('Category')
+                    ->options(
+                        AgentNotificationCategory::all()->pluck('name', 'id')->toArray()
+                    )
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(
+                        function (string $operation, string $state, Forms\Set $set) {
+                            if ($operation === 'create') {
+                                $category = AgentNotificationCategory::find($state);
+                                $set('message', $category->message_template);
+                                return;
+                            }
+                        }
+                    )
+                    ->searchable()
+                    ->helperText('Search for categories with name.')
+                    ->required(),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255)
@@ -58,6 +77,10 @@ class AgentNotificationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('agent.name')
+                    ->label('Agent')
+                    ->description(
+                        fn (AgentNotification $record): string => $record?->agent->phone_number
+                    )
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('title')
@@ -67,6 +90,10 @@ class AgentNotificationResource extends Resource
                     )
                     ->wrap()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Sent by')
                     ->numeric()

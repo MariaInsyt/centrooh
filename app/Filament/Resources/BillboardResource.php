@@ -21,7 +21,7 @@ class BillboardResource extends Resource
 {
     protected static ?string $model = Billboard::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
 
     protected static ?string $navigationGroup = 'Operations';
 
@@ -150,6 +150,10 @@ class BillboardResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Name')
+                    ->description(
+                        fn (Billboard $record): string => $record->location
+                    )
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -169,7 +173,13 @@ class BillboardResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('district.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('agent.name'),
+                Tables\Columns\TextColumn::make('agent.name')
+                    ->label('Agent')
+                    ->searchable()
+                    ->description(
+                        fn (Billboard $record): string => $record?->agent->phone_number
+                    )
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('createdBy.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')

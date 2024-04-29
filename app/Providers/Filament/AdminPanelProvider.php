@@ -53,6 +53,12 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups([
+                'Operations',
+                'Access Control',
+                'Administrative',
+                'Options',
+            ]);
     }
 }
