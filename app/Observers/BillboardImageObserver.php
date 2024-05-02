@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\BillboardImage;
+use Illuminate\Support\Facades\Log;
+
 class BillboardImageObserver
 {
     /**
@@ -18,16 +20,7 @@ class BillboardImageObserver
      */
     public function updated(BillboardImage $billboardImage): void
     {
-        $billboardId = $billboardImage->billboard_id;
-        $activeImages = BillboardImage::active()->where('billboard_id', $billboardId)->get();
-
-        if (!empty($activeImages)) {
-            foreach ($activeImages as $image) {
-                if ($image->id !== $billboardImage->id) {
-                    $image->update(['is_active' => 0]);
-                }
-            }
-        }
+        //
     }
 
     /**
