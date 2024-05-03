@@ -72,24 +72,29 @@ class AgentResource extends Resource
                                 $set('status', false);
                                 return;
                             } else if ($operation === 'edit') {
-                                if (empty($record->devices)) {
-                                    Notification::make()
-                                        ->title('No Devices')
-                                        ->body('Agent must sign in with at least one device before they can be activated.')
-                                        ->warning()
-                                        ->persistent()
-                                        ->send();
-                                    $set('status', false);
-                                    return;
-                                }
-                                if ($state === true) {
-                                    $device = Device::where('agent_id', $record->id)->first();
-                                    try {
-                                        $device->notify(new AccountActivated);
-                                    } catch (\Exception $e) {
-                                        Log::error($e->getMessage());
+                                if (
+                                    empty($record->devices)
+                                ) {
+                                    if ($state === true) {
+                                        $device = Device::where([[
+                                            'agent_id', $record->id,
+                                            ['is_active', true]
+                                        ]])->first();
+                                        try {
+                                            $device->notify(new AccountActivated);
+                                        } catch (\Exception $e) {
+                                            Log::error($e->getMessage());
+                                        }
                                     }
                                 }
+                                Notification::make()
+                                    ->title('No Devices')
+                                    ->body('Agent must sign in with at least one device before they can be activated.')
+                                    ->warning()
+                                    ->persistent()
+                                    ->send();
+                                $set('status', false);
+                                return;
                             }
                         }),
                     Forms\Components\FileUpload::make('profile_picture')
