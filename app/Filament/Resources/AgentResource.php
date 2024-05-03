@@ -86,6 +86,8 @@ class AgentResource extends Resource
                                             Log::error($e->getMessage());
                                         }
                                     }
+                                    $set('status', $state);
+                                    return;
                                 }
                                 Notification::make()
                                     ->title('No Devices')
