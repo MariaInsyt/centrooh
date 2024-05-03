@@ -73,7 +73,7 @@ class AgentResource extends Resource
                                 return;
                             } else if ($operation === 'edit') {
                                 if (
-                                    empty($record->devices)
+                                    $record->devices->count() > 0
                                 ) {
                                     if ($state === true) {
                                         $device = Device::where([[
