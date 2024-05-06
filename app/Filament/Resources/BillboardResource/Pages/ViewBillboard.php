@@ -21,7 +21,7 @@ class ViewBillboard extends ViewRecord
         return [
             Actions\EditAction::make(),
             Action::make('requestImage')
-                ->label('Request Image')
+                ->label('Request Billboard Image')
                 ->icon('heroicon-o-camera')
                 ->action(
                     function () {
