@@ -29,6 +29,8 @@ class AgentResource extends Resource
 
     protected static ?string $navigationGroup = 'Operations';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -176,6 +178,19 @@ class AgentResource extends Resource
             'create' => Pages\CreateAgent::route('/create'),
             'view' => Pages\ViewAgent::route('/{record}'), // '/{record}
             'edit' => Pages\EditAgent::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'username', 'email', 'phone_number'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Details' => $record->email . ' - ' . $record->phone_number,
+            'Status' => $record->status ? 'Active' : 'Inactive',
         ];
     }
 }
