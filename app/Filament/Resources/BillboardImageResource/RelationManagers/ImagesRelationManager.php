@@ -2,20 +2,30 @@
 
 namespace App\Filament\Resources\BillboardImageResource\RelationManagers;
 
+use App\Models\Billboard;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Models\AgentNotification;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Notifications\DeviceAgentNotification;
+use App\Models\AgentNotification;
+use App\Models\Device;
 
 class ImagesRelationManager extends RelationManager
 {
     protected static string $relationship = 'images';
+
+    public function isReadOnly(): bool
+    {
+        return false;
+    }
 
     public function form(Form $form): Form
     {
@@ -30,6 +40,9 @@ class ImagesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]))
             ->recordTitleAttribute('billboard_id')
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
@@ -60,35 +73,46 @@ class ImagesRelationManager extends RelationManager
             ->filters([
                 //
             ])
-            ->headerActions([
-                Action::make('requestImage')
-                    ->label('Request Billboard Image')
-                    ->form([
-                        Forms\Components\TextInput::make('title')->required(),
-                        Forms\Components\Textarea::make('message')->required(),
-                    ])
-                    ->action(function (?Model $record, array $data) {
-                        Log::info($record);
-                    })
-            ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
-                Action::make('sendFeedback')
-                    ->label('Send Feedback')
-                    ->form([
-                        Forms\Components\TextInput::make('title')->required(),
-                        Forms\Components\Textarea::make('message')->required(),
-                    ])
-                    ->action(function (?Model $record, array $data) {
-                        Log::info($record);
-                    })
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Action::make('sendFeedback')
+                        ->icon('heroicon-o-paper-airplane')
+                        ->label('Send Feedback')
+                        ->form([
+                            Forms\Components\TextInput::make('title')
+                                ->default('Feedback on Image')
+                                ->required(),
+                            Forms\Components\Textarea::make('message')->required(),
+                        ])
+                        ->action(function (?Model $record, array $data) {
+                            $billboard = Billboard::find($record->billboard_id);
+
+                            if (is_null($billboard->agent_id)) {
+                                return;
+                            }
+                            $device = Device::where('agent_id', $billboard->agent_id)->first();
+
+                            try {
+                                AgentNotification::create([
+                                    'agent_id' => $billboard->agent_id,
+                                    'title' => $data['title'],
+                                    'message' => $data['message'],
+                                ]);
+
+                                $device->notify(new DeviceAgentNotification($data['title'], $data['message']));
+
+                            } catch (\Exception $e) {
+                                Log::error($e->getMessage());
+                            }
+                        }),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])
+                    ->button()
+                    ->label('Actions')
             ])
-            ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
-            ]);
+            ->bulkActions([]);
     }
 }

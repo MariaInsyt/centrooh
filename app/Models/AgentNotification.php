@@ -41,7 +41,6 @@ class AgentNotification extends Model
     ];
 
     protected $casts = [
-        'data' => 'array',
         'read_at' => 'datetime',
         'created_at' => 'datetime',
     ];
