@@ -16,6 +16,7 @@ use App\Models\Agent;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class BillboardResource extends Resource
 {
@@ -24,6 +25,8 @@ class BillboardResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
 
     protected static ?string $navigationGroup = 'Operations';
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
     {
@@ -233,6 +236,20 @@ class BillboardResource extends Resource
             'create' => Pages\CreateBillboard::route('/create'),
             'view' => Pages\ViewBillboard::route('/{record}'), // '/{record}
             'edit' => Pages\EditBillboard::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Location' => $record->district->name . ' - ' . $record->location,
+            'Address' => $record->address,
+            'Agent' => $record->agent->name,
         ];
     }
 }
