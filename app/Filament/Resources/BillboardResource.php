@@ -45,12 +45,9 @@ class BillboardResource extends Resource
                     Forms\Components\Radio::make('update_interval')
                         ->label('How often should this billboard be updated?')
                         ->options([
-                            'daily' => 'Daily',
                             'weekly' => 'Weekly',
-                            'monthly' => 'Monthly',
                             'quarterly' => 'Quarterly',
-                        ])
-                        ->default('quarterly'),
+                        ]),
                 ])->columnSpan(2),
                 Section::make('Billboard Status')->schema([
                     Forms\Components\Toggle::make('is_active')
