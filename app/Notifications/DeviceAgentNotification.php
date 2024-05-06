@@ -36,9 +36,16 @@ class DeviceAgentNotification extends Notification
 
     public function toFcm($notifiable): FcmMessage
     {
-        return (new FcmMessage(notification: new FcmNotification(
-            title: $this->title,
-            body: $this->body
-        )));
+        // return (new FcmMessage(notification: new FcmNotification(
+        //     title: $this->title,
+        //     body: $this->body
+        // )));
+        $message = new FcmMessage();
+        $message->content([
+            'title' => $this->title,
+            'body' => $this->body,
+        ]);
+
+        return $message;
     }
 }
