@@ -21,6 +21,20 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 // Log::error('Expired one-time passwords check failed.');
             });
+        $schedule->command('app:update-weekly-billboard-status')->weekly()
+            ->onSuccess(function () {
+                Log::info('Weekly billboard status updated.');
+            })
+            ->onFailure(function () {
+                Log::error('Weekly billboard status update failed.');
+            });
+        $schedule->command('app:update-quarterly-billboard-status')->quarterly()
+            ->onSuccess(function () {
+                Log::info('Quarterly billboard status updated.');
+            })
+            ->onFailure(function () {
+                Log::error('Quarterly billboard status update failed.');
+            });
     }
 
     /**
@@ -28,7 +42,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
