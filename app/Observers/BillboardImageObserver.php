@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\BillboardImage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class BillboardImageObserver
 {
@@ -45,5 +46,10 @@ class BillboardImageObserver
     public function forceDeleted(BillboardImage $billboardImage): void
     {
         //
+        try {
+            Storage::disk('do')->delete($billboardImage->image);
+        } catch (\Exception $e) {
+            Log::error('Error deleting image: ' . $e->getMessage());
+        }
     }
 }
