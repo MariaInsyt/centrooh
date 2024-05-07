@@ -29,17 +29,10 @@ class AccountActivated extends Notification
 
     public function toFcm(object $notifiable): FcmMessage
     {
-        // return (new FcmMessage(notification: new FcmNotification(
-        //     title: 'Account Activated',
-        //     body: 'Your Insyt Media Agent Account has been activated.',
-        //     image: ''
-        // )));
-        $message = new FcmMessage();
-        $message->content([
-            'title' => 'Account Activated',
-            'body' => 'Your Insyt Media Agent Account has been activated.',
-        ]);
-
-        return $message;
+        return (new FcmMessage(notification: new FcmNotification(
+            title: 'Account Activated',
+            body: 'Your Insyt Media Agent Account has been activated.',
+            image: ''
+        )));
     }
 }
