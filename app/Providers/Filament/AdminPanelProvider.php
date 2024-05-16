@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Chiiya\FilamentAccessControl\FilamentAccessControlPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -17,7 +18,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
+use lockscreen\FilamentLockscreen\Lockscreen;
+use lockscreen\FilamentLockscreen\Http\Middleware\Locker;
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -26,7 +28,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            // ->login()
+            ->plugin(FilamentAccessControlPlugin::make())
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -50,8 +53,10 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->plugin(new Lockscreen())
             ->authMiddleware([
                 Authenticate::class,
+                Locker::class,
             ])
             ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([

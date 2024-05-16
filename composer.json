@@ -11,6 +11,7 @@
         "php": "^8.1",
         "africastalking/africastalking": "^3.0",
         "cheesegrits/filament-google-maps": "^3.0",
+        "chiiya/filament-access-control": "^2.4",
         "doctrine/dbal": "^3.8",
         "filament/filament": "^3.2",
         "filament/forms": "^3.2",
@@ -23,6 +24,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "marjose123/filament-lockscreen": "^2.0",
         "protonemedia/laravel-cross-eloquent-search": "^3.4"
     },
     "require-dev": {
