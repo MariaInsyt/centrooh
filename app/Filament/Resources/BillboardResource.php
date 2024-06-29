@@ -36,12 +36,16 @@ class BillboardResource extends Resource
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(255),
+                    Forms\Components\TextInput::make('site_code')
+                        ->required()
+                        ->label('Site Code')
+                        ->maxLength(255),
                     Forms\Components\Select::make('status')
                         ->options([
                             'pending' => 'Pending',
                             'updated' => 'Updated',
                             'notupdated' => 'Not Updated',
-                            'rejected' => 'rejected'
+                            'rejected' => 'Rejected'
                         ])
                         ->default('pending')
                         ->required(),
@@ -155,6 +159,9 @@ class BillboardResource extends Resource
                         fn (Billboard $record): string => $record->location
                     )
                     ->searchable(),
+                Tables\Columns\TextColumn::make('site_code')
+                    ->label('Site Code')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'pending' => 'Pending',
@@ -210,7 +217,7 @@ class BillboardResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ])->poll('60s');
+            ])->poll('180s');
     }
 
     public static function getEloquentQuery(): Builder

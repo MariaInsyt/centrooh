@@ -23,7 +23,7 @@ class BillboardsRelationManager extends RelationManager
                         'pending' => 'Pending',
                         'updated' => 'Updated',
                         'notupdated' => 'Not Updated',
-                        'rejected' => 'rejected'
+                        'rejected' => 'Rejected'
                     ]),
                 Forms\Components\TextInput::make('name')
                     ->required()
@@ -37,6 +37,8 @@ class BillboardsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('site_code')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'pending' => 'Pending',

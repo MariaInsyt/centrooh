@@ -26,6 +26,7 @@ class Billboard extends Model
         'district_id',
         'created_by',
         'name',
+        'site_code',
         'status',
         'agent_id',
         'is_active',
