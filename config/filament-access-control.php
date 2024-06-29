@@ -1,9 +1,12 @@
 <?php
 
-use Chiiya\FilamentAccessControl\Resources\FilamentUserResource;
-use Chiiya\FilamentAccessControl\Resources\RoleResource;
-use Chiiya\FilamentAccessControl\Resources\PermissionResource;
-use Chiiya\FilamentAccessControl\Models\FilamentUser;
+use App\Filament\Resources\UserResource;
+use App\Models\User;
+// use Chiiya\FilamentAccessControl\Resources\RoleResource;
+// use Chiiya\FilamentAccessControl\Resources\PermissionResource;
+use App\Filament\Resources\PermissionResource;
+use App\Filament\Resources\RoleResource;
+// use Chiiya\FilamentAccessControl\Models\FilamentUser;
 
 return [
     /*
@@ -33,7 +36,7 @@ return [
     |--------------------------------------------------------------------------
     | User model used for admin access and management.
     */
-    'user_model' => FilamentUser::class,
+    'user_model' => User::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +45,7 @@ return [
     | Resources used for managing users, roles and permissions.
     */
     'resources' => [
-        'user' => FilamentUserResource::class,
+        'user' => UserResource::class,
         'role' => RoleResource::class,
         'permission' => PermissionResource::class,
     ]
