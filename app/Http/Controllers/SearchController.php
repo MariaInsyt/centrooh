@@ -19,7 +19,7 @@ class SearchController extends Controller
         $results = Search::add(Billboard::active()->where(
             'agent_id',
             $agent->id
-        ), ['name', 'district.name', 'location', 'address'])
+        ), ['name', 'district.name', 'location', 'address', 'site_code'])
             ->beginWithWildcard()
             ->orderBy('updated_at')
             ->search($request->q);
